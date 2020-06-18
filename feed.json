@@ -14,7 +14,7 @@
             "url": "https://totetmatt.github.io/ffmpeg.html",
             "title": "FFMpeg",
             "summary": "General User Dochttp://www.astro-electronic.de/FFmpeg_Book.pdf https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/ ffmpeg -i inputd.mp4 -filter_complex \"[0:v] fps=12,scale=w=480:h=-1,split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1\" output.gif https://superuser.com/questions/777938/ffmpeg-convert-a-video-to-a-timelapse ffmpeg -i input.mp4 -filter:v \"setpts=0.5*PTS\" -an output.mp4 http://mahugh.com/2015/04/29/creating-time-lapse-videos/ http://social.d-e.gr/techblog/posts/12-smoother-timelapses-ffmpeg&hellip;",
-            "content_html": "<h2>General User Doc</h2>\n<p><a href=\"http://www.astro-electronic.de/FFmpeg_Book.pdf\">http://www.astro-electronic.de/FFmpeg_Book.pdf</a></p>\n<p> </p>\n<h2>Create gif</h2>\n<p><a href=\"https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/\">https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/</a></p>\n<p><code>ffmpeg -i inputd.mp4 -filter_complex \"[0:v] fps=12,scale=w=480:h=-1,split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1\" output.gif</code></p>\n<h2>Timelapse</h2>\n<p><a href=\"https://superuser.com/questions/777938/ffmpeg-convert-a-video-to-a-timelapse\">https://superuser.com/questions/777938/ffmpeg-convert-a-video-to-a-timelapse</a></p>\n<p><code>ffmpeg -i input.mp4 -filter:v \"setpts=0.5*PTS\" -an output.mp4</code></p>\n<p><a href=\"http://mahugh.com/2015/04/29/creating-time-lapse-videos/\">http://mahugh.com/2015/04/29/creating-time-lapse-videos/</a></p>\n<p><a href=\"http://social.d-e.gr/techblog/posts/12-smoother-timelapses-ffmpeg\">http://social.d-e.gr/techblog/posts/12-smoother-timelapses-ffmpeg</a></p>\n<pre><code>ffmpeg -i input -vf \"tblend=average,framestep=2,tblend=average,framestep=2,tblend=average,framestep=2,tblend=average,framestep=2,setpts=0.25*PTS\" -r 96 -b:v 30M -crf 10 -an output</code></pre>",
+            "content_html": "<h2>General User Doc</h2>\n<p><a href=\"http://www.astro-electronic.de/FFmpeg_Book.pdf\">http://www.astro-electronic.de/FFmpeg_Book.pdf</a></p>\n<p> </p>\n<h2>Create gif</h2>\n<p><a href=\"https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/\">https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/</a></p>\n<p><code>ffmpeg -i inputd.mp4 -filter_complex \"[0:v] fps=12,scale=w=480:h=-1,split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1\" output.gif</code></p>\n<h2>Timelapse</h2>\n<p><a href=\"https://superuser.com/questions/777938/ffmpeg-convert-a-video-to-a-timelapse\">https://superuser.com/questions/777938/ffmpeg-convert-a-video-to-a-timelapse</a></p>\n<p><code>ffmpeg -i input.mp4 -filter:v \"setpts=0.5*PTS\" -an output.mp4</code></p>\n<p><a href=\"http://mahugh.com/2015/04/29/creating-time-lapse-videos/\">http://mahugh.com/2015/04/29/creating-time-lapse-videos/</a></p>\n<p><a href=\"http://social.d-e.gr/techblog/posts/12-smoother-timelapses-ffmpeg\">http://social.d-e.gr/techblog/posts/12-smoother-timelapses-ffmpeg</a></p>\n<p><code>ffmpeg -i input -vf \"tblend=average,framestep=2,tblend=average,framestep=2,tblend=average,framestep=2,tblend=average,framestep=2,setpts=0.25*PTS\" -r 96 -b:v 30M -crf 10 -an output</code></p>",
             "author": {
                 "name": "Totetmatt"
             },
@@ -22,8 +22,8 @@
                    "video",
                    "ffmpeg"
             ],
-            "date_published": "2020-06-18T21:38:32+02:00",
-            "date_modified": "2020-06-18T21:38:32+02:00"
+            "date_published": "2020-06-18T21:41:40+02:00",
+            "date_modified": "2020-06-18T21:41:40+02:00"
         }
     ]
 }
