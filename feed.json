@@ -1,0 +1,27 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "Toto do stuff",
+    "description": "",
+    "home_page_url": "https://totetmatt.github.io",
+    "feed_url": "https://totetmatt.github.io/feed.json",
+    "user_comment": "",
+    "author": {
+        "name": "Totetmatt"
+    },
+    "items": [
+        {
+            "id": "https://totetmatt.github.io/test.html",
+            "url": "https://totetmatt.github.io/test.html",
+            "title": "Test",
+            "summary": "Yes hello cool",
+            "content_html": "<p>Yes hello cool</p>",
+            "author": {
+                "name": "Totetmatt"
+            },
+            "tags": [
+            ],
+            "date_published": "2020-06-18T19:02:55+02:00",
+            "date_modified": "2020-06-18T19:02:55+02:00"
+        }
+    ]
+}

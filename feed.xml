@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Toto do stuff</title>
+    <link href="https://totetmatt.github.io/feed.xml" rel="self" />
+    <link href="https://totetmatt.github.io" />
+    <updated>1970-01-01T01:00:00+01:00</updated>
+    <author>
+        <name>Totetmatt</name>
+    </author>
+    <id>https://totetmatt.github.io</id>
+
+    <entry>
+        <title>Test</title>
+        <author>
+            <name>Totetmatt</name>
+        </author>
+        <link href="https://totetmatt.github.io/test.html"/>
+        <id>https://totetmatt.github.io/test.html</id>
+
+        <updated>2020-06-18T19:02:55+02:00</updated>
+            <summary>
+                <![CDATA[
+                    Yes hello cool
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Yes hello cool</p>
+            ]]>
+        </content>
+    </entry>
+</feed>
