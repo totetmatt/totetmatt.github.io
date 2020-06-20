@@ -10,6 +10,21 @@
     },
     "items": [
         {
+            "id": "https://totetmatt.github.io/bash-sort-2.html",
+            "url": "https://totetmatt.github.io/bash-sort-2.html",
+            "title": "Bash Sort",
+            "summary": "From time to time, we got some code challenge / codekata at work. The concept is simple it’s just some simple problem to sovles so&hellip;",
+            "content_html": "<p>From time to time, we got some code challenge / codekata at work. The concept is simple it’s just some simple problem to sovles so that we can share. I usualy do one version in a language like <strong>Scala</strong>, <strong>Python</strong> or other more or less fancy language like <strong>C++</strong> or even <strong>Haskell</strong> but I also try to have a <strong>Bash</strong> version, with extra point if I can oneline it.</p>\n<p>Here it was about sorting Star Wars movies from their story chronological order starting from a list with the release order.</p>\n<pre><code class=\"language-bash\">## Generation of files ##\n\ncat &gt; movies.txt &lt;&lt;EOL\nA New Hope (1977)\nThe Empire Strikes Back (1980)\nReturn of the Jedi (1983)\nThe Phantom Menace (1999)\nAttack of the Clones (2002)\nRevenge of the Sith (2005)\nThe Force Awakens (2015)\nRogue One: A Star Wars Story (2016)\nThe Last Jedi (2017)\nSolo: A Star Wars Story (2018)\nEOL\n\ncat &gt; order.txt &lt;&lt;EOL\n4 \n5\n6\n10\n8\n1\n2\n3\n7\n9\nEOL\n\ncat &gt; expect.txt &lt;&lt;EOL\nThe Phantom Menace (1999)\nAttack of the Clones (2002)\nRevenge of the Sith (2005)\nSolo: A Star Wars Story (2018)\nRogue One: A Star Wars Story (2016)\nA New Hope (1977)\nThe Empire Strikes Back (1980)\nReturn of the Jedi (1983)\nThe Force Awakens (2015)\nThe Last Jedi (2017)\nEOL</code></pre>\n<p>Each line of <code>order.txt</code> tells which line of <code>movies.txt</code> to substitute so we can’t just <code>paste order.txt movies.txt  | sort -n</code> because we need to find a way to extract the <strong>nth</strong> line of the <code>movies.txt</code> </p>\n<p>To do that, we can use <code>sed -n &quot;Np&quot; file</code>, <code>N</code> is the line number to get, <code>p</code> is the sed command to “print”. <code>-n</code> is needed as by default, sed will print the file anyway.</p>\n<pre><code class=\"language-bash\">totetmatt$ sed -n 10p movies.txt\n\nSolo: A Star Wars Story (2018)</code></pre>\n<p>We can then wire this with the output of the <code>order.txt</code>  via a pipeline and a <code>xargs</code>. Let’s also add a <code>tee</code> at the end so it stores the result in a file while keeping the possibilites to use the output for other operation.</p>\n<pre><code class=\"language-bash\">cat order.txt  | xargs -I % sed -n &quot;%p&quot; movies.txt  |  tee result.txt\n\nThe Phantom Menace (1999)\nAttack of the Clones (2002)\nRevenge of the Sith (2005)\nSolo: A Star Wars Story (2018)\nRogue One: A Star Wars Story (2016)\nA New Hope (1977)\nThe Empire Strikes Back (1980)\nReturn of the Jedi (1983)\nThe Force Awakens (2015)\nThe Last Jedi (2017)</code></pre>\n<p>We could add some automated check to be sure the operation works as expected. Good solution will be to use <code>diff result.txt expect.txt</code> as we have 2 files generated. But let’s say that we don’t have the <code>result.txt</code> , only the command output and still want to use the <code>diff</code> that only accept file as input.</p>\n<p>We can then use <code>&lt;(command)</code> to concider the whole command output as an input file for <code>diff</code>.   </p>\n<pre><code class=\"language-bash\">diff &lt;(cat order.txt  | xargs -I % sed -n &quot;%p&quot; movies.txt | tee result.txt) expect.txt || echo &quot;No ok&quot;</code></pre>\n<p><a href=\"https://gist.github.com/totetmatt/2b4c74eb214fcc6d04ffcd39bdbd43ad\">https://gist.github.com/totetmatt/2b4c74eb214fcc6d04ffcd39bdbd43ad</a></p>\n",
+            "author": {
+                "name": "Totetmatt"
+            },
+            "tags": [
+                   "bash"
+            ],
+            "date_published": "2020-06-20T11:05:56+02:00",
+            "date_modified": "2020-06-20T11:05:56+02:00"
+        },
+        {
             "id": "https://totetmatt.github.io/ffmpeg.html",
             "url": "https://totetmatt.github.io/ffmpeg.html",
             "title": "FFMpeg",
@@ -22,8 +37,8 @@
                    "video",
                    "ffmpeg"
             ],
-            "date_published": "2020-06-20T01:38:44+02:00",
-            "date_modified": "2020-06-20T01:38:44+02:00"
+            "date_published": "2020-06-20T11:05:56+02:00",
+            "date_modified": "2020-06-20T11:05:56+02:00"
         },
         {
             "id": "https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html",
@@ -36,8 +51,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-06-20T01:38:44+02:00",
-            "date_modified": "2020-06-20T01:38:44+02:00"
+            "date_published": "2020-06-20T11:05:56+02:00",
+            "date_modified": "2020-06-20T11:05:56+02:00"
         },
         {
             "id": "https://totetmatt.github.io/twitter-streaming-importer-naoyun-as-a-gephi-plugin.html",
@@ -51,8 +66,8 @@
             "tags": [
                    "Gephi"
             ],
-            "date_published": "2020-06-20T01:38:44+02:00",
-            "date_modified": "2020-06-20T01:38:44+02:00"
+            "date_published": "2020-06-20T11:05:56+02:00",
+            "date_modified": "2020-06-20T11:05:56+02:00"
         },
         {
             "id": "https://totetmatt.github.io/request-for-comments-reference-map.html",
@@ -68,8 +83,8 @@
                    "Rfc",
                    "Gephi"
             ],
-            "date_published": "2020-06-20T01:38:44+02:00",
-            "date_modified": "2020-06-20T01:38:44+02:00"
+            "date_published": "2020-06-20T11:05:56+02:00",
+            "date_modified": "2020-06-20T11:05:56+02:00"
         },
         {
             "id": "https://totetmatt.github.io/the-final-hack-of-the-gephi-streaming-plugin.html",
@@ -84,8 +99,8 @@
                    "Stream",
                    "Gephi"
             ],
-            "date_published": "2020-06-20T01:38:44+02:00",
-            "date_modified": "2020-06-20T01:38:44+02:00"
+            "date_published": "2020-06-20T11:05:56+02:00",
+            "date_modified": "2020-06-20T11:05:56+02:00"
         },
         {
             "id": "https://totetmatt.github.io/lets-play-gephi-dbpedia-rdf-sparql-and-your-favorite-actors.html",
@@ -103,8 +118,8 @@
                    "Gephi",
                    "Dbpedia"
             ],
-            "date_published": "2020-06-20T01:38:44+02:00",
-            "date_modified": "2020-06-20T01:38:44+02:00"
+            "date_published": "2020-06-20T11:05:56+02:00",
+            "date_modified": "2020-06-20T11:05:56+02:00"
         },
         {
             "id": "https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html",
@@ -117,8 +132,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-06-20T01:38:44+02:00",
-            "date_modified": "2020-06-20T01:38:44+02:00"
+            "date_published": "2020-06-20T11:05:56+02:00",
+            "date_modified": "2020-06-20T11:05:56+02:00"
         },
         {
             "id": "https://totetmatt.github.io/force-atlas-of-europe.html",
@@ -132,8 +147,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-06-20T01:38:44+02:00",
-            "date_modified": "2020-06-20T01:38:44+02:00"
+            "date_published": "2020-06-20T11:05:56+02:00",
+            "date_modified": "2020-06-20T11:05:56+02:00"
         },
         {
             "id": "https://totetmatt.github.io/lets-play-gephi-understand-k-partite-graph.html",
@@ -150,23 +165,8 @@
                    "Multipartite",
                    "Gephi"
             ],
-            "date_published": "2020-06-20T01:38:44+02:00",
-            "date_modified": "2020-06-20T01:38:44+02:00"
-        },
-        {
-            "id": "https://totetmatt.github.io/world-flight-routes.html",
-            "url": "https://totetmatt.github.io/world-flight-routes.html",
-            "title": "World Flight Routes",
-            "summary": " Gexf file",
-            "content_html": "<figure class=\"alignnone size-medium wp-image-418\"><a href=\"http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/07/world_flight_routes.png\"><img loading=\"lazy\"  src=\"https://totetmatt.github.io/media/posts/33/world_flight_routes-300x298.png\" sizes=\"(max-width: 48em) 100vw, 768px\" srcset=\"https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-xs.png 300w ,https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-sm.png 480w ,https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-md.png 768w ,https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-lg.png 1024w ,https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-xl.png 1360w ,https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-2xl.png 1600w\"  alt=\"world_flight_routes\" width=\"300\" height=\"298\" /></figure></a></p>\n<p><a href=\"http://matthieu-totet.fr/World_flight_routes.gexf\">Gexf file</a></p>\n",
-            "image": "https://totetmatt.github.io/media/posts/33/world_flight_routes.png",
-            "author": {
-                "name": "Totetmatt"
-            },
-            "tags": [
-            ],
-            "date_published": "2020-06-20T01:38:44+02:00",
-            "date_modified": "2020-06-20T01:38:44+02:00"
+            "date_published": "2020-06-20T11:05:56+02:00",
+            "date_modified": "2020-06-20T11:05:56+02:00"
         }
     ]
 }

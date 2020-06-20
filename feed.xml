@@ -10,6 +10,91 @@
     <id>https://totetmatt.github.io</id>
 
     <entry>
+        <title>Bash Sort</title>
+        <author>
+            <name>Totetmatt</name>
+        </author>
+        <link href="https://totetmatt.github.io/bash-sort-2.html"/>
+        <id>https://totetmatt.github.io/bash-sort-2.html</id>
+            <category term="bash"/>
+
+        <updated>2020-06-20T11:05:56+02:00</updated>
+            <summary>
+                <![CDATA[
+                    From time to time, we got some code challenge / codekata at work. The concept is simple it’s just some simple problem to sovles so&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>From time to time, we got some code challenge / codekata at work. The concept is simple it’s just some simple problem to sovles so that we can share. I usualy do one version in a language like <strong>Scala</strong>, <strong>Python</strong> or other more or less fancy language like <strong>C++</strong> or even <strong>Haskell</strong> but I also try to have a <strong>Bash</strong> version, with extra point if I can oneline it.</p>
+<p>Here it was about sorting Star Wars movies from their story chronological order starting from a list with the release order.</p>
+<pre><code class="language-bash">## Generation of files ##
+
+cat &gt; movies.txt &lt;&lt;EOL
+A New Hope (1977)
+The Empire Strikes Back (1980)
+Return of the Jedi (1983)
+The Phantom Menace (1999)
+Attack of the Clones (2002)
+Revenge of the Sith (2005)
+The Force Awakens (2015)
+Rogue One: A Star Wars Story (2016)
+The Last Jedi (2017)
+Solo: A Star Wars Story (2018)
+EOL
+
+cat &gt; order.txt &lt;&lt;EOL
+4 
+5
+6
+10
+8
+1
+2
+3
+7
+9
+EOL
+
+cat &gt; expect.txt &lt;&lt;EOL
+The Phantom Menace (1999)
+Attack of the Clones (2002)
+Revenge of the Sith (2005)
+Solo: A Star Wars Story (2018)
+Rogue One: A Star Wars Story (2016)
+A New Hope (1977)
+The Empire Strikes Back (1980)
+Return of the Jedi (1983)
+The Force Awakens (2015)
+The Last Jedi (2017)
+EOL</code></pre>
+<p>Each line of <code>order.txt</code> tells which line of <code>movies.txt</code> to substitute so we can’t just <code>paste order.txt movies.txt  | sort -n</code> because we need to find a way to extract the <strong>nth</strong> line of the <code>movies.txt</code> </p>
+<p>To do that, we can use <code>sed -n &quot;Np&quot; file</code>, <code>N</code> is the line number to get, <code>p</code> is the sed command to “print”. <code>-n</code> is needed as by default, sed will print the file anyway.</p>
+<pre><code class="language-bash">totetmatt$ sed -n 10p movies.txt
+
+Solo: A Star Wars Story (2018)</code></pre>
+<p>We can then wire this with the output of the <code>order.txt</code>  via a pipeline and a <code>xargs</code>. Let’s also add a <code>tee</code> at the end so it stores the result in a file while keeping the possibilites to use the output for other operation.</p>
+<pre><code class="language-bash">cat order.txt  | xargs -I % sed -n &quot;%p&quot; movies.txt  |  tee result.txt
+
+The Phantom Menace (1999)
+Attack of the Clones (2002)
+Revenge of the Sith (2005)
+Solo: A Star Wars Story (2018)
+Rogue One: A Star Wars Story (2016)
+A New Hope (1977)
+The Empire Strikes Back (1980)
+Return of the Jedi (1983)
+The Force Awakens (2015)
+The Last Jedi (2017)</code></pre>
+<p>We could add some automated check to be sure the operation works as expected. Good solution will be to use <code>diff result.txt expect.txt</code> as we have 2 files generated. But let’s say that we don’t have the <code>result.txt</code> , only the command output and still want to use the <code>diff</code> that only accept file as input.</p>
+<p>We can then use <code>&lt;(command)</code> to concider the whole command output as an input file for <code>diff</code>.   </p>
+<pre><code class="language-bash">diff &lt;(cat order.txt  | xargs -I % sed -n &quot;%p&quot; movies.txt | tee result.txt) expect.txt || echo &quot;No ok&quot;</code></pre>
+<p><a href="https://gist.github.com/totetmatt/2b4c74eb214fcc6d04ffcd39bdbd43ad">https://gist.github.com/totetmatt/2b4c74eb214fcc6d04ffcd39bdbd43ad</a></p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
         <title>FFMpeg</title>
         <author>
             <name>Totetmatt</name>
@@ -19,7 +104,7 @@
             <category term="video"/>
             <category term="ffmpeg"/>
 
-        <updated>2020-06-20T01:38:44+02:00</updated>
+        <updated>2020-06-20T11:05:56+02:00</updated>
             <summary>
                 <![CDATA[
                     Some findings and command line I'm using regularly with ffmpeg. http://www.astro-electronic.de/FFmpeg_Book.pdf https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/ ffmpeg -i inputd.mp4 -filter_complex "[0:v] fps=12,scale=w=480:h=-1,split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1" output.gif https://superuser.com/questions/777938/ffmpeg-convert-a-video-to-a-timelapse ffmpeg&hellip;
@@ -51,7 +136,7 @@
         <link href="https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html"/>
         <id>https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html</id>
 
-        <updated>2020-06-20T01:38:44+02:00</updated>
+        <updated>2020-06-20T11:05:56+02:00</updated>
             <summary>
                 <![CDATA[
                     If you work on Machine Learning / Deep Learning with Keras, you can export the model in a dot file. And guess what ? Gephi&hellip;
@@ -85,7 +170,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
         <id>https://totetmatt.github.io/twitter-streaming-importer-naoyun-as-a-gephi-plugin.html</id>
             <category term="Gephi"/>
 
-        <updated>2020-06-20T01:38:44+02:00</updated>
+        <updated>2020-06-20T11:05:56+02:00</updated>
             <summary>
                 <![CDATA[
                     Hello everybody ! Great news today, almost a 5 years acheivement : Twitter Streaming Importer is out. It uses the Twitter Stream API to get&hellip;
@@ -129,7 +214,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
             <category term="Rfc"/>
             <category term="Gephi"/>
 
-        <updated>2020-06-20T01:38:44+02:00</updated>
+        <updated>2020-06-20T11:05:56+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/38/RFC.jpg" alt="" />
@@ -155,7 +240,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
             <category term="Stream"/>
             <category term="Gephi"/>
 
-        <updated>2020-06-20T01:38:44+02:00</updated>
+        <updated>2020-06-20T11:05:56+02:00</updated>
             <summary>
                 <![CDATA[
                     We saw that we can use Gephi Streaming Plugin to push data into Gephi. It works well , but it brings a lot of constrains&hellip;
@@ -276,7 +361,7 @@ With the release of Gephi 0.9 approaching, and the various change it will bring,
             <category term="Gephi"/>
             <category term="Dbpedia"/>
 
-        <updated>2020-06-20T01:38:44+02:00</updated>
+        <updated>2020-06-20T11:05:56+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/34/1386271588578.jpg" alt="" />
@@ -410,7 +495,7 @@ WHERE
         <link href="https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html"/>
         <id>https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html</id>
 
-        <updated>2020-06-20T01:38:44+02:00</updated>
+        <updated>2020-06-20T11:05:56+02:00</updated>
             <summary>
                 <![CDATA[
                     Recurent issue with Gephi is the new Java 8 verison which Gephi does'nt really like. The simple alternative is to keep or reinstall Java 7,&hellip;
@@ -460,7 +545,7 @@ The procedure I'll explain is on Windows, but MacOS will be same and Linux user 
         <link href="https://totetmatt.github.io/force-atlas-of-europe.html"/>
         <id>https://totetmatt.github.io/force-atlas-of-europe.html</id>
 
-        <updated>2020-06-20T01:38:44+02:00</updated>
+        <updated>2020-06-20T11:05:56+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/35/Europa_Force_Atlas.jpg" alt="" />
@@ -487,7 +572,7 @@ The procedure I'll explain is on Windows, but MacOS will be same and Linux user 
             <category term="Multipartite"/>
             <category term="Gephi"/>
 
-        <updated>2020-06-20T01:38:44+02:00</updated>
+        <updated>2020-06-20T11:05:56+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/25/screenshot_130704.png" alt="" />
@@ -578,30 +663,6 @@ to<br />
 <p>The plugin works quite well, but sometime it has some limitation on large graph. Or sometime you may want to reduce your graph and have a custom metric computed. Then the only alternative to that is to use a script that will generate you the graph.</p>
 <h3>Conclusion</h3>
 <p>Multipartite graph are complex to analyse, but reducing it to monopartite graphs gives you more vision to get insight about your data.</p>
-
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>World Flight Routes</title>
-        <author>
-            <name>Totetmatt</name>
-        </author>
-        <link href="https://totetmatt.github.io/world-flight-routes.html"/>
-        <id>https://totetmatt.github.io/world-flight-routes.html</id>
-
-        <updated>2020-06-20T01:38:44+02:00</updated>
-            <summary>
-                <![CDATA[
-                        <img src="https://totetmatt.github.io/media/posts/33/world_flight_routes.png" alt="" />
-                     Gexf file
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                    <img src="https://totetmatt.github.io/media/posts/33/world_flight_routes.png" alt="" />
-                <figure class="alignnone size-medium wp-image-418"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/07/world_flight_routes.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/33/world_flight_routes-300x298.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-xs.png 300w ,https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-sm.png 480w ,https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-md.png 768w ,https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-lg.png 1024w ,https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-xl.png 1360w ,https://totetmatt.github.io/media/posts/33/responsive/world_flight_routes-300x298-2xl.png 1600w"  alt="world_flight_routes" width="300" height="298" /></figure></a></p>
-<p><a href="http://matthieu-totet.fr/World_flight_routes.gexf">Gexf file</a></p>
 
             ]]>
         </content>
