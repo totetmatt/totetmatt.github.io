@@ -10,6 +10,23 @@
     },
     "items": [
         {
+            "id": "https://totetmatt.github.io/extract-chapters-youtube-media.html",
+            "url": "https://totetmatt.github.io/extract-chapters-youtube-media.html",
+            "title": "Extract chapters from Youtube Media",
+            "summary": "Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of&hellip;",
+            "content_html": "<p>Youtube recently got this “chapter” concept where it fragment a long video with chapters.  I think this data might be parsed from the description of the video done, as they already parse any timestamp available for a while now.</p>\n<p>Thanks to youtube-dl, we can download thena video and the metadata which now contains this chapter data. </p>\n<pre><code class=\"language-bash\">$ youtube-dl --write-info-json -x --audio-format mp3 https://www.youtube.com/watch?v=HZTStHzWRxM\n[youtube] HZTStHzWRxM: Downloading webpage\n[info] Writing video description metadata as JSON to: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.info.json\n[download] Destination: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm\n[download] 100% of 3.22MiB in 00:00\n[ffmpeg] Destination: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3\nDeleting original file The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm (pass -k to keep)</code></pre>\n<p>We will use <a href=\"https://www.youtube.com/watch?v=HZTStHzWRxM\">https://www.youtube.com/watch?v=HZTStHzWRxM</a> as example.</p>\n<p>The command above will download the video file, transcode it to mp3 and also download the metadata in a json format. We have now 2 files :</p>\n<ul>\n<li><code>The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.info.json</code> that contains data </li>\n<li><code>The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3</code> that is the media</li>\n</ul>\n<p><code>jq</code> is a wonderful command line to manipulate json on bash. We can for example get the title of the video like this :</p>\n<pre><code class=\"language-bash\">$ cat The\\ New\\ Youtube\\ Chapter\\ Timestamp\\ Feature-HZTStHzWRxM.info.json | jq -r .title  | sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39;\n\nThe_New_Youtube_Chapter_Timestamp_Feature</code></pre>\n<p>The <code>sed</code> here is to make sure we won’t have special characters that might lead to some error later.</p>\n<p>The <code>-r</code> on <code>jq</code> indicate to return “raw text”. By default, <code>jq</code> will use some syntax colorization and keep some  sepcial character that might leads to some issue. </p>\n<p>If available, Youtube-dl info json contains a <code>chapters</code> array that contain all the chapters with their <code>start_time</code> , <code>end_time</code> and <code>title</code> .</p>\n<pre><code class=\"language-bash\">$ cat The\\ New\\ Youtube\\ Chapter\\ Timestamp\\ Feature-HZTStHzWRxM.info.json |\\\njq -r &#39;.chapters[]&#39;\n\n{\n  &quot;start_time&quot;: 0,\n  &quot;end_time&quot;: 17,\n  &quot;title&quot;: &quot;The new feature&quot;\n}\n{\n  &quot;start_time&quot;: 17,\n  &quot;end_time&quot;: 76,\n  &quot;title&quot;: &quot;Slow roll-out&quot;\n}\n{\n  &quot;start_time&quot;: 76,\n  &quot;end_time&quot;: 124,\n  &quot;title&quot;: &quot;How it works&quot;\n}\n{\n  &quot;start_time&quot;: 124,\n  &quot;end_time&quot;: 180,\n  &quot;title&quot;: &quot;Problems / suggestions for the future&quot;\n}</code></pre>\n<p>The idea now is to use each dict entry here as parameters for <code>ffmpeg</code> to split the media according to the chapters data. As we are in bash, current json representation will be quite hard to use it like that, so we need to transform a little bit the representation here to use the output of <code>jq</code> in a pipe and in <code>xargs</code>.</p>\n<p>What also we need to take into consideration is that <code>ffmpeg</code> can split a media by giving the option <code>-ss</code> to know where to start and <code>-t</code> to know the <strong>duration</strong> of the cut, <strong>not the end time</strong>. As the information on the json gives us a start and end time, we need to perfom a simple substraction to have the start time and the duration.</p>\n<pre><code class=\"language-bash\">$ cat The\\ New\\ Youtube\\ Chapter\\ Timestamp\\ Feature-HZTStHzWRxM.info.json  |\\\njq -r &#39;.chapters[] | .start_time,.end_time-.start_time,.title &#39; |\\\nsed &#39;s/&quot;//g&#39;\n\n0\n17\nThe new feature\n17\n59\nSlow roll-out\n76\n48\nHow it works\n124\n56\nProblems / suggestions for the future</code></pre>\n<p>Thanks to <code>jq</code>, we can perfom simple math operation directly on the command to compute the duration. <code>sed</code> here again is only for cleaning up special characters.</p>\n<p>Now, we can pipe the wonderful <code>xargs</code> to use the output as parameter and trigger a <code>ffmpeg</code> command</p>\n<pre><code class=\"language-bash\">$ cat The\\ New\\ Youtube\\ Chapter\\ Timestamp\\ Feature-HZTStHzWRxM.info.json|\\\njq -r &#39;.chapters[] | .start_time,.end_time-.start_time,.title &#39; |\\\nsed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39; |\\\nxargs -n3 -t -d&#39;\\n&#39; sh -c &#39;ffmpeg -y -ss $0 -i &quot;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&quot; -t $1 -codec:a copy &quot;$2.mp3&quot;&#39;</code></pre>\n<ul>\n<li><code>-n3</code> indicate to take parameters 3 by 3*</li>\n<li><code>-t</code> is only to debug as it will print each command <code>xargs</code> will execute</li>\n<li><code>-d&#39;\\n&#39;</code> indicate that parameters are separated by <code>\\n</code></li>\n</ul>\n<p>What is cool is that we could potentially parallelize the process here by adding to <code>xargs</code> the parameter <code>-P X</code> to run the multiple <code>ffmpeg</code> invokation in parallel.</p>\n<p>On <code>ffmpeg</code> side, nothing tremendous : </p>\n<ul>\n<li><code>-ss</code> and <code>-t</code> has been already explain as start time and duration,</li>\n<li><code>-codec:a copy</code> indicate that we keep everything same as the original file in terms of codec, so no re-encoding for the output file, which means it’s going fast </li>\n<li><code>-y</code> to avoid prompt and force override of existing output file </li>\n</ul>\n<p>That works quite well. It might be possible to fully one line it, but let’s put a proper script to ease the usage of this.</p>\n<pre><code class=\"language-bash\">#!/bin/sh\nset -x\n\n#Download media + metadata\nyoutube-dl --write-info-json -x --audio-format mp3 -o &quot;tmp_out.%(ext)s&quot; $1\n\n# Maybe a way to get the file name from previous function\nINFO=&quot;tmp_out.info.json&quot;\nAUDIO=&quot;tmp_out.mp3&quot;\necho :: $INFO $AUDIO ::\n# Fetch the title\nTITLE=$(cat &quot;$INFO&quot; | jq -r .title | sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39; )\n                                                #  ^--- Remove all weird character as we want to use it as filename\n# We will put all chapter into a directory\nmkdir &quot;$TITLE&quot;\n\n# Chapterization\ncat &quot;$INFO&quot; |\\\njq -r &#39;.chapters[] | .start_time,.end_time-.start_time,.title &#39; |\\\nsed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39; |\\\nxargs -n3 -t -d&#39;\\n&#39; sh -c &quot;ffmpeg -y -ss \\$0 -i \\&quot;$AUDIO\\&quot; -to \\$1 -codec:a copy  -f mp3  \\&quot;$TITLE/\\$2.mp3\\&quot;&quot;\n\n#Remove tmp file\nrm tmp_out*</code></pre>\n<p>The script file here : <a href=\"https://gist.github.com/totetmatt/b4bf50c62642e5a9e1bf6365a47e19c6\">https://gist.github.com/totetmatt/b4bf50c62642e5a9e1bf6365a47e19c6</a></p>\n<p>No big change on the global approach just something to becareful : Yes, there is a hell quote escape game to play and it might not be pleasant ….</p>\n<p>To explain the last part, as far as I understand it, the string will be evaluated multiple time : </p>\n<ul>\n<li>First time will be at “script level”, so it will replace any  <code>$VARIABLE</code> present in the script like <code>$AUDIO</code> and <code>$TITLE</code> </li>\n<li>Second time will be at <code>xargs / sh -c</code> invokation where then it’s possible to use <code>$0 $1 and $2</code>. But if we don’t escape it first, theses variables will be evaluated at the first round, that’s why we need to backslash it <code>\\$0, \\$1, \\$2</code>.</li>\n</ul>\n<p>You can see the result of the string after the 1st evaluation thanks to the <code>-t</code> option of <code>xargs</code> : </p>\n<pre><code class=\"language-bash\">sh -c &#39;ffmpeg -y -ss $0 -i &quot;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&quot; -to $1 -codec:a copy  -f mp3  &quot;The_New_Youtube_Chapter_Timestamp_Feature/$2.mp3&quot;&#39; 124 56 Problems___suggestions_for_the_future</code></pre>\n<p>There might be other and better way to deal wih the args parsing, the string escape and the string cleanup, but current solution works enough :)</p>\n",
+            "author": {
+                "name": "Totetmatt"
+            },
+            "tags": [
+                   "youtube",
+                   "ffmpeg",
+                   "bash"
+            ],
+            "date_published": "2020-06-26T10:39:30+02:00",
+            "date_modified": "2020-06-26T10:39:30+02:00"
+        },
+        {
             "id": "https://totetmatt.github.io/bash-sort-2.html",
             "url": "https://totetmatt.github.io/bash-sort-2.html",
             "title": "Bash Sort",
@@ -21,8 +38,8 @@
             "tags": [
                    "bash"
             ],
-            "date_published": "2020-06-20T11:05:56+02:00",
-            "date_modified": "2020-06-20T11:05:56+02:00"
+            "date_published": "2020-06-26T10:39:30+02:00",
+            "date_modified": "2020-06-26T10:39:30+02:00"
         },
         {
             "id": "https://totetmatt.github.io/ffmpeg.html",
@@ -37,8 +54,8 @@
                    "video",
                    "ffmpeg"
             ],
-            "date_published": "2020-06-20T11:05:56+02:00",
-            "date_modified": "2020-06-20T11:05:56+02:00"
+            "date_published": "2020-06-26T10:39:30+02:00",
+            "date_modified": "2020-06-26T10:39:30+02:00"
         },
         {
             "id": "https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html",
@@ -51,8 +68,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-06-20T11:05:56+02:00",
-            "date_modified": "2020-06-20T11:05:56+02:00"
+            "date_published": "2020-06-26T10:39:30+02:00",
+            "date_modified": "2020-06-26T10:39:30+02:00"
         },
         {
             "id": "https://totetmatt.github.io/twitter-streaming-importer-naoyun-as-a-gephi-plugin.html",
@@ -66,8 +83,8 @@
             "tags": [
                    "Gephi"
             ],
-            "date_published": "2020-06-20T11:05:56+02:00",
-            "date_modified": "2020-06-20T11:05:56+02:00"
+            "date_published": "2020-06-26T10:39:30+02:00",
+            "date_modified": "2020-06-26T10:39:30+02:00"
         },
         {
             "id": "https://totetmatt.github.io/request-for-comments-reference-map.html",
@@ -83,8 +100,8 @@
                    "Rfc",
                    "Gephi"
             ],
-            "date_published": "2020-06-20T11:05:56+02:00",
-            "date_modified": "2020-06-20T11:05:56+02:00"
+            "date_published": "2020-06-26T10:39:30+02:00",
+            "date_modified": "2020-06-26T10:39:30+02:00"
         },
         {
             "id": "https://totetmatt.github.io/the-final-hack-of-the-gephi-streaming-plugin.html",
@@ -99,8 +116,8 @@
                    "Stream",
                    "Gephi"
             ],
-            "date_published": "2020-06-20T11:05:56+02:00",
-            "date_modified": "2020-06-20T11:05:56+02:00"
+            "date_published": "2020-06-26T10:39:30+02:00",
+            "date_modified": "2020-06-26T10:39:30+02:00"
         },
         {
             "id": "https://totetmatt.github.io/lets-play-gephi-dbpedia-rdf-sparql-and-your-favorite-actors.html",
@@ -118,8 +135,8 @@
                    "Gephi",
                    "Dbpedia"
             ],
-            "date_published": "2020-06-20T11:05:56+02:00",
-            "date_modified": "2020-06-20T11:05:56+02:00"
+            "date_published": "2020-06-26T10:39:30+02:00",
+            "date_modified": "2020-06-26T10:39:30+02:00"
         },
         {
             "id": "https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html",
@@ -132,8 +149,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-06-20T11:05:56+02:00",
-            "date_modified": "2020-06-20T11:05:56+02:00"
+            "date_published": "2020-06-26T10:39:30+02:00",
+            "date_modified": "2020-06-26T10:39:30+02:00"
         },
         {
             "id": "https://totetmatt.github.io/force-atlas-of-europe.html",
@@ -147,26 +164,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-06-20T11:05:56+02:00",
-            "date_modified": "2020-06-20T11:05:56+02:00"
-        },
-        {
-            "id": "https://totetmatt.github.io/lets-play-gephi-understand-k-partite-graph.html",
-            "url": "https://totetmatt.github.io/lets-play-gephi-understand-k-partite-graph.html",
-            "title": "Let&#x27;s Play Gephi : Understand k-partite graph",
-            "summary": "K-partite, Bipartite ... What is it ?Most of the time, when you create a graph, all the nodes are representing the same \"kind\" of object.",
-            "content_html": "<h1>K-partite, Bipartite ... What is it ?</h1>\n<p>Most of the time, when you create a graph, all the nodes are representing the same \"kind\" of object.</p>\n<ul>\n<li>In a Social Network : Persons</li>\n<li>In a Route Netowork : Stops, Airports, Stations etc...</li>\n<li>In a Geographical Network  : Countries</li>\n</ul>\n<p>But sometime, depends on your graph modelisation, you will encounter a graph that will have 2, 3 or multiple \"kinds\" of nodes where the links are almost exclusively going from one type to the other. These graphs are called <strong>Multipartite Graphs</strong>.</p>\n<ul>\n<li>If you have <strong>2</strong> kinds of nodes, it's a <strong>Bi</strong>partite Graph (or <strong>2</strong>-partite)\n<ul>\n<li>Example : Social Network : Persons &lt;-&gt; Companies</li>\n</ul>\n</li>\n<li>If you have <strong>3</strong> kinds of nodes it's a<strong> 3</strong>-partite Graph\n<ul>\n<li>Example : Movie Network : Actors &lt;-&gt; Movies &lt;-&gt; Directors</li>\n</ul>\n</li>\n<li>If you have <strong>k</strong> kinds of nodes it's a <strong>k</strong>-partite Graph</li>\n</ul>\n<p><a href=\"https://en.wikipedia.org/wiki/Multipartite_graph\"> </a>If you want a proper scientific definition, <a href=\"https://en.wikipedia.org/wiki/Multipartite_graph\">Wikipedia</a> will be your friend.</p>\n<h2>The Dataset</h2>\n<p>To illustrate this thema, we will use a well know dataset : The Cac 40 Administrators relationship from <a href=\"http://www.citoyennumerique.fr/?tag=cac40\">www.citoyennumerique.fr.</a></p>\n<p>Please, feel free to play with the graph. I provide you the gexfs here <a href=\"http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/07/Tuto_Multitpartite_CAC40.zip\">Tuto_Multitpartite_CAC40</a> . The tutorial will be based on the <strong>SimpleGraph</strong>, but I also give you the <strong>FullGraph</strong> to play with.</p>\n<p>How the graph is build ? Well, a <strong>company</strong> has several <strong>administrators </strong>and nothing prevent an <strong>administrator</strong> to be in multiple <strong>companies</strong>, so we build a directed graph where <strong>companies</strong> are sources of edges and targets are the <strong>administrators</strong>.</p>\n<blockquote><p>I'll focus on the technics and metrics. I let yourself think about the ethics and politics ;-) .</p></blockquote>\n<figure class=\" wp-image-254  alignnone\">If you follow, this is a typical bi-partite graph. If you look on the data, part of the node has a property type <strong>Administrator</strong> and the other part has a property type <strong>Company</strong>.<a href=\"http://matthieu-totet.fr/Koumin/wp-content/uploads/2013/11/screenshot_130704.png\"><img loading=\"lazy\"  src=\"https://totetmatt.github.io/media/posts/25/screenshot_130704-1024x1024.png\" sizes=\"(max-width: 48em) 100vw, 768px\" srcset=\"https://totetmatt.github.io/media/posts/25/responsive/screenshot_130704-1024x1024-xs.png 300w ,https://totetmatt.github.io/media/posts/25/responsive/screenshot_130704-1024x1024-sm.png 480w ,https://totetmatt.github.io/media/posts/25/responsive/screenshot_130704-1024x1024-md.png 768w ,https://totetmatt.github.io/media/posts/25/responsive/screenshot_130704-1024x1024-lg.png 1024w ,https://totetmatt.github.io/media/posts/25/responsive/screenshot_130704-1024x1024-xl.png 1360w ,https://totetmatt.github.io/media/posts/25/responsive/screenshot_130704-1024x1024-2xl.png 1600w\"  alt=\"Cac 40 bipartite graph\" width=\"614\" height=\"614\" /></figure></a></p>\n<p>It's already nice and we can get quick obesvation:</p>\n<ul>\n<li>Filtering by InDegree, we can check that Michel Pebereau and Jean-Martin Folz are in <strong>5 companies</strong> at the same time.</li>\n<li>Filtering by OutDegree, we can check that St-Gobain and Total have <strong>8 administrators</strong> that are in other companies.</li>\n</ul>\n<p>But that could be done without graph, an ordered list on excel would have done the job.</p>\n<h3>How to deal with multipartite graphs ?</h3>\n<p>It feels that it's not very convenient to get something out of this, and even the interpretation of metrics isn't easy. That's because the graph is mixing different notions (type) which makes it a little difficult to read and analyse.</p>\n<p>So what to do ? There isn't official methodology, but we can use some trick to improve the readability. The easiest one is to <strong>reduce</strong> the <strong>bi-partite</strong> graph in a <strong>mono-partite</strong> graph.</p>\n<blockquote><p>By reducing, we will \"lose\" information but we gain in <strong>readability</strong> and <strong>synthesis</strong>, that's part of the work in datavisualisation to see at which level we want to go and how to deal with this trade of information. This will mostly be driven by the question you want to answer.</p></blockquote>\n<p>The principle of the reduction is to concider some nodes as edges and deduce a new graph based on this rule. In our example we have 2 ways to go :</p>\n<ul>\n<li>Either we decide that the nodes of type \"Company \" are the edges. It will generate a <strong>graph</strong> of \"<strong>Persons </strong>\"</li>\n<li>Either we decide that the nodes of type \"Person \" are the edges. It will generate a <strong>graph</strong> of \"<strong>Company </strong>\"</li>\n</ul>\n<blockquote><p>Here both graphs generated makes \"sense\" (network of entities) but it can appears that one of the graph isn't really meanful. That's part of your work to juge this aspect.</p></blockquote>\n<p>Now, how to perform the transformation ?</p>\n<h3>Using a Plugin</h3>\n<p>The easiest way would be to use the<a href=\"https://marketplace.gephi.org/plugin/multimode-networks-transformations-2/\" target=\"_blank\"> Multimode Network Transformation. </a>The plugin is available on the gephi app market and in the plugin manager in Gephi.</p>\n<p>When it's installed, you should be able to see or display the<strong> Multimode Network Transformation</strong> tab.</p>\n<p>Then, load the graph your are interested in, clone it in a new workspace and :</p>\n<ul>\n<li>Click on <strong>Load Attributes</strong> and select <strong>Type</strong> on <strong>Attribute Type.</strong></li>\n<li>For left matrix select \"<strong>Administrator - Company</strong>\" and right matrix \"<strong>Company - Adminstrator</strong>\"</li>\n<li>Enable <strong>Remove Edges</strong> and<strong> Remove Nodes</strong>, and Click<strong> Run<br />\n</strong></li>\n</ul>\n<figure class=\" size-medium wp-image-426 aligncenter\"><a href=\"http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/07/MultiPartite_Gephi.png\"><img loading=\"lazy\"  src=\"https://totetmatt.github.io/media/posts/25/MultiPartite_Gephi-300x202.png\" sizes=\"(max-width: 48em) 100vw, 768px\" srcset=\"https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi-300x202-xs.png 300w ,https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi-300x202-sm.png 480w ,https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi-300x202-md.png 768w ,https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi-300x202-lg.png 1024w ,https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi-300x202-xl.png 1360w ,https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi-300x202-2xl.png 1600w\"  alt=\"MultiPartite_Gephi\" width=\"300\" height=\"202\" /></figure></a>The plugins will actually to transform each relation like:</p>\n<p style=\"text-align: center;\">(Administrator)<strong>&lt;</strong><strong>--</strong>(Company)<strong>--&gt;</strong>(Administrator)<br />\nto<br />\n(Administrator)<strong>&lt;-[</strong>{weight=Nb of Common Companies}<strong>]-&gt;</strong>(Administrator)</p>\n<p>Now you should have a graph with only administrators on the graph preview.</p>\n<figure class=\" size-medium wp-image-428 aligncenter\"><a href=\"http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/07/Tuto_Multi_P2P.png\"><img loading=\"lazy\"  src=\"https://totetmatt.github.io/media/posts/25/Tuto_Multi_P2P-300x249.png\" sizes=\"(max-width: 48em) 100vw, 768px\" srcset=\"https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_P2P-300x249-xs.png 300w ,https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_P2P-300x249-sm.png 480w ,https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_P2P-300x249-md.png 768w ,https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_P2P-300x249-lg.png 1024w ,https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_P2P-300x249-xl.png 1360w ,https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_P2P-300x249-2xl.png 1600w\"  alt=\"Tuto_Multi_P2P\" width=\"300\" height=\"249\" /></figure></a></p>\n<p>To generate the relation between companies, replay the same steps from the original graph (duplicate the workspace0 again) and in the <strong>Multimode Network Transformation</strong> use :</p>\n<ul>\n<li>Left Matrix : Company - Administrator</li>\n<li>Right Matrix : Administrator - Company</li>\n</ul>\n<figure class=\" size-medium wp-image-427 aligncenter\"><a href=\"http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/07/MultiPartite_Gephi_2.png\"><img loading=\"lazy\"  src=\"https://totetmatt.github.io/media/posts/25/MultiPartite_Gephi_2-300x228.png\" sizes=\"(max-width: 48em) 100vw, 768px\" srcset=\"https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi_2-300x228-xs.png 300w ,https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi_2-300x228-sm.png 480w ,https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi_2-300x228-md.png 768w ,https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi_2-300x228-lg.png 1024w ,https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi_2-300x228-xl.png 1360w ,https://totetmatt.github.io/media/posts/25/responsive/MultiPartite_Gephi_2-300x228-2xl.png 1600w\"  alt=\"MultiPartite_Gephi_2\" width=\"300\" height=\"228\" /></figure></a></p>\n<figure class=\" size-medium wp-image-429 aligncenter\"><a href=\"http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/07/Tuto_Multi_C2C.png\"><img loading=\"lazy\"  src=\"https://totetmatt.github.io/media/posts/25/Tuto_Multi_C2C-300x288.png\" sizes=\"(max-width: 48em) 100vw, 768px\" srcset=\"https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_C2C-300x288-xs.png 300w ,https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_C2C-300x288-sm.png 480w ,https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_C2C-300x288-md.png 768w ,https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_C2C-300x288-lg.png 1024w ,https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_C2C-300x288-xl.png 1360w ,https://totetmatt.github.io/media/posts/25/responsive/Tuto_Multi_C2C-300x288-2xl.png 1600w\"  alt=\"Tuto_Multi_C2C\" width=\"300\" height=\"288\" /></figure></a>With the 2 new graphs, we are able to see some particularities:</p>\n<ul>\n<li>The maximum of<strong> common administrator</strong> between company is <strong>3</strong> : Bouygues and Alstom with Olivier Bouygues, Patrick Kron, Georges Chodron de Courcel</li>\n<li><strong>Half of the companies</strong> are sharing at least 2 administrators .</li>\n<li>The maximum of <strong>common company</strong> between person is <strong>3</strong> : Gerard Lamarche and Paul Demaray Jr see each other when Total, GDF Suez and Lafarge SA have a meeting with Board of Directors.</li>\n<li>From all administrators that are in at least 2 companies,<strong> 1/3 of them are at least in the same 2 companies</strong>.</li>\n</ul>\n<p>These statements can be deduced from the original graph, but wasn't obvious. With the 2 generated graphs, it makes easy to see it.</p>\n<blockquote><p>The works now is mostly to look at graphs, and resume all the particularities within a production (poster, interactive graph, newpaper writting etc...)</p></blockquote>\n<h3></h3>\n<h3>Limitations</h3>\n<p>The plugin works quite well, but sometime it has some limitation on large graph. Or sometime you may want to reduce your graph and have a custom metric computed. Then the only alternative to that is to use a script that will generate you the graph.</p>\n<h3>Conclusion</h3>\n<p>Multipartite graph are complex to analyse, but reducing it to monopartite graphs gives you more vision to get insight about your data.</p>\n",
-            "image": "https://totetmatt.github.io/media/posts/25/screenshot_130704.png",
-            "author": {
-                "name": "Totetmatt"
-            },
-            "tags": [
-                   "cac40",
-                   "Multipartite",
-                   "Gephi"
-            ],
-            "date_published": "2020-06-20T11:05:56+02:00",
-            "date_modified": "2020-06-20T11:05:56+02:00"
+            "date_published": "2020-06-26T10:39:30+02:00",
+            "date_modified": "2020-06-26T10:39:30+02:00"
         }
     ]
 }

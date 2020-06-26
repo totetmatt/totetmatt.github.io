@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Extract chapters from Youtube Media - Toto do stuff</title><meta name="description" content="Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of&hellip;"><meta name="generator" content="Publii Open-Source CMS for Static Site"><link rel="canonical" href="https://totetmatt.github.io/extract-chapters-youtube-media.html"><link rel="alternate" type="application/atom+xml" href="https://totetmatt.github.io/feed.xml"><link rel="alternate" type="application/json" href="https://totetmatt.github.io/feed.json"><meta property="og:title" content="Extract chapters from Youtube Media"><meta property="og:site_name" content="Toto do stuff"><meta property="og:description" content="Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of&hellip;"><meta property="og:url" content="https://totetmatt.github.io/extract-chapters-youtube-media.html"><meta property="og:type" content="article"><style>:root{--body-font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";--heading-font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";--logo-font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";--menu-font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"}</style><link rel="stylesheet" href="https://totetmatt.github.io/assets/css/style.css?v=838b0bec572750258fea0088050b0a64"><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://totetmatt.github.io/extract-chapters-youtube-media.html"},"headline":"Extract chapters from Youtube Media","datePublished":"2020-06-26T01:24","dateModified":"2020-06-26T10:39","description":"Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of&hellip;","author":{"@type":"Person","name":"Totetmatt"},"publisher":{"@type":"Organization","name":"Totetmatt"}}</script></head><body><div class="site-container"><header class="top" id="js-header"><a class="logo" href="https://totetmatt.github.io/">Toto do stuff</a></header><main><article class="post"><div class="hero"><figure class="hero__image hero__image--overlay"><img src="https://totetmatt.github.io/media/website/bg.jpg" srcset="https://totetmatt.github.io/media/website/responsive/bg-xs.jpg 300w, https://totetmatt.github.io/media/website/responsive/bg-sm.jpg 480w, https://totetmatt.github.io/media/website/responsive/bg-md.jpg 768w, https://totetmatt.github.io/media/website/responsive/bg-lg.jpg 1024w, https://totetmatt.github.io/media/website/responsive/bg-xl.jpg 1360w, https://totetmatt.github.io/media/website/responsive/bg-2xl.jpg 1600w" sizes="(max-width: 1600px) 100vw, 1600px" loading="eager" alt=""></figure><header class="hero__content"><div class="wrapper"><div class="post__meta"><time datetime="2020-06-26T01:24">20/06/26</time></div><h1>Extract chapters from Youtube Media</h1><div class="post__meta post__meta--author"><a href="https://totetmatt.github.io/authors/totetmatt/" class="feed__author invert">Totetmatt</a></div></div></header></div><div class="wrapper post__entry"><p>Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of the video done, as they already parse any timestamp available for a while now.</p><p>Thanks to youtube-dl, we can download thena video and the metadata which now contains this chapter data.</p><pre><code class="language-bash">$ youtube-dl --write-info-json -x --audio-format mp3 https://www.youtube.com/watch?v=HZTStHzWRxM
+[youtube] HZTStHzWRxM: Downloading webpage
+[info] Writing video description metadata as JSON to: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.info.json
+[download] Destination: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm
+[download] 100% of 3.22MiB in 00:00
+[ffmpeg] Destination: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3
+Deleting original file The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm (pass -k to keep)</code></pre><p>We will use <a href="https://www.youtube.com/watch?v=HZTStHzWRxM">https://www.youtube.com/watch?v=HZTStHzWRxM</a> as example.</p><p>The command above will download the video file, transcode it to mp3 and also download the metadata in a json format. We have now 2 files :</p><ul><li><code>The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.info.json</code> that contains data</li><li><code>The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3</code> that is the media</li></ul><p><code>jq</code> is a wonderful command line to manipulate json on bash. We can for example get the title of the video like this :</p><pre><code class="language-bash">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json | jq -r .title  | sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39;
+
+The_New_Youtube_Chapter_Timestamp_Feature</code></pre><p>The <code>sed</code> here is to make sure we won’t have special characters that might lead to some error later.</p><p>The <code>-r</code> on <code>jq</code> indicate to return “raw text”. By default, <code>jq</code> will use some syntax colorization and keep some sepcial character that might leads to some issue.</p><p>If available, Youtube-dl info json contains a <code>chapters</code> array that contain all the chapters with their <code>start_time</code> , <code>end_time</code> and <code>title</code> .</p><pre><code class="language-bash">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json |\
+jq -r &#39;.chapters[]&#39;
+
+{
+  &quot;start_time&quot;: 0,
+  &quot;end_time&quot;: 17,
+  &quot;title&quot;: &quot;The new feature&quot;
+}
+{
+  &quot;start_time&quot;: 17,
+  &quot;end_time&quot;: 76,
+  &quot;title&quot;: &quot;Slow roll-out&quot;
+}
+{
+  &quot;start_time&quot;: 76,
+  &quot;end_time&quot;: 124,
+  &quot;title&quot;: &quot;How it works&quot;
+}
+{
+  &quot;start_time&quot;: 124,
+  &quot;end_time&quot;: 180,
+  &quot;title&quot;: &quot;Problems / suggestions for the future&quot;
+}</code></pre><p>The idea now is to use each dict entry here as parameters for <code>ffmpeg</code> to split the media according to the chapters data. As we are in bash, current json representation will be quite hard to use it like that, so we need to transform a little bit the representation here to use the output of <code>jq</code> in a pipe and in <code>xargs</code>.</p><p>What also we need to take into consideration is that <code>ffmpeg</code> can split a media by giving the option <code>-ss</code> to know where to start and <code>-t</code> to know the <strong>duration</strong> of the cut, <strong>not the end time</strong>. As the information on the json gives us a start and end time, we need to perfom a simple substraction to have the start time and the duration.</p><pre><code class="language-bash">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json  |\
+jq -r &#39;.chapters[] | .start_time,.end_time-.start_time,.title &#39; |\
+sed &#39;s/&quot;//g&#39;
+
+0
+17
+The new feature
+17
+59
+Slow roll-out
+76
+48
+How it works
+124
+56
+Problems / suggestions for the future</code></pre><p>Thanks to <code>jq</code>, we can perfom simple math operation directly on the command to compute the duration. <code>sed</code> here again is only for cleaning up special characters.</p><p>Now, we can pipe the wonderful <code>xargs</code> to use the output as parameter and trigger a <code>ffmpeg</code> command</p><pre><code class="language-bash">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json|\
+jq -r &#39;.chapters[] | .start_time,.end_time-.start_time,.title &#39; |\
+sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39; |\
+xargs -n3 -t -d&#39;\n&#39; sh -c &#39;ffmpeg -y -ss $0 -i &quot;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&quot; -t $1 -codec:a copy &quot;$2.mp3&quot;&#39;</code></pre><ul><li><code>-n3</code> indicate to take parameters 3 by 3*</li><li><code>-t</code> is only to debug as it will print each command <code>xargs</code> will execute</li><li><code>-d&#39;\n&#39;</code> indicate that parameters are separated by <code>\n</code></li></ul><p>What is cool is that we could potentially parallelize the process here by adding to <code>xargs</code> the parameter <code>-P X</code> to run the multiple <code>ffmpeg</code> invokation in parallel.</p><p>On <code>ffmpeg</code> side, nothing tremendous :</p><ul><li><code>-ss</code> and <code>-t</code> has been already explain as start time and duration,</li><li><code>-codec:a copy</code> indicate that we keep everything same as the original file in terms of codec, so no re-encoding for the output file, which means it’s going fast</li><li><code>-y</code> to avoid prompt and force override of existing output file</li></ul><p>That works quite well. It might be possible to fully one line it, but let’s put a proper script to ease the usage of this.</p><pre><code class="language-bash">#!/bin/sh
+set -x
+
+#Download media + metadata
+youtube-dl --write-info-json -x --audio-format mp3 -o &quot;tmp_out.%(ext)s&quot; $1
+
+# Maybe a way to get the file name from previous function
+INFO=&quot;tmp_out.info.json&quot;
+AUDIO=&quot;tmp_out.mp3&quot;
+echo :: $INFO $AUDIO ::
+# Fetch the title
+TITLE=$(cat &quot;$INFO&quot; | jq -r .title | sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39; )
+                                                #  ^--- Remove all weird character as we want to use it as filename
+# We will put all chapter into a directory
+mkdir &quot;$TITLE&quot;
+
+# Chapterization
+cat &quot;$INFO&quot; |\
+jq -r &#39;.chapters[] | .start_time,.end_time-.start_time,.title &#39; |\
+sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39; |\
+xargs -n3 -t -d&#39;\n&#39; sh -c &quot;ffmpeg -y -ss \$0 -i \&quot;$AUDIO\&quot; -to \$1 -codec:a copy  -f mp3  \&quot;$TITLE/\$2.mp3\&quot;&quot;
+
+#Remove tmp file
+rm tmp_out*</code></pre><p>The script file here : <a href="https://gist.github.com/totetmatt/b4bf50c62642e5a9e1bf6365a47e19c6">https://gist.github.com/totetmatt/b4bf50c62642e5a9e1bf6365a47e19c6</a></p><p>No big change on the global approach just something to becareful : Yes, there is a hell quote escape game to play and it might not be pleasant ….</p><p>To explain the last part, as far as I understand it, the string will be evaluated multiple time :</p><ul><li>First time will be at “script level”, so it will replace any <code>$VARIABLE</code> present in the script like <code>$AUDIO</code> and <code>$TITLE</code></li><li>Second time will be at <code>xargs / sh -c</code> invokation where then it’s possible to use <code>$0 $1 and $2</code>. But if we don’t escape it first, theses variables will be evaluated at the first round, that’s why we need to backslash it <code>\$0, \$1, \$2</code>.</li></ul><p>You can see the result of the string after the 1st evaluation thanks to the <code>-t</code> option of <code>xargs</code> :</p><pre><code class="language-bash">sh -c &#39;ffmpeg -y -ss $0 -i &quot;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&quot; -to $1 -codec:a copy  -f mp3  &quot;The_New_Youtube_Chapter_Timestamp_Feature/$2.mp3&quot;&#39; 124 56 Problems___suggestions_for_the_future</code></pre><p>There might be other and better way to deal wih the args parsing, the string escape and the string cleanup, but current solution works enough :)</p></div><footer class="wrapper post__footer"><p class="post__last-updated">This article was updated on 20/06/26</p><ul class="post__tag"><li><a href="https://totetmatt.github.io/bash/">bash</a></li><li><a href="https://totetmatt.github.io/ffmpeg/">ffmpeg</a></li><li><a href="https://totetmatt.github.io/youtube/">youtube</a></li></ul><div class="post__share"></div><div class="post__bio bio"><div class="bio__info"><h3 class="bio__name"><a href="https://totetmatt.github.io/authors/totetmatt/" class="invert" rel="author">Totetmatt</a></h3></div></div></footer></article><nav class="post__nav"><div class="post__nav-inner"><div class="post__nav-prev"><svg width="1.041em" height="0.416em" aria-hidden="true"><use xlink:href="https://totetmatt.github.io/assets/svg/svg-map.svg#arrow-prev"/></svg> <a href="https://totetmatt.github.io/bash-sort-2.html" class="invert post__nav-link" rel="prev"><span>Previous</span> Bash Sort</a></div></div></nav></main><footer class="footer"><div class="footer__copyright"><p>Powered by <a href="https://getpublii.com" target="_blank" rel="nofollow noopener">Publii Static CMS</a></p></div><button class="footer__bttop js-footer__bttop" aria-label="Back to top"><svg><title>Back to top</title><use xlink:href="https://totetmatt.github.io/assets/svg/svg-map.svg#toparrow"/></svg></button></footer></div><script>window.publiiThemeMenuConfig = {    
+        mobileMenuMode: 'sidebar',
+        animationSpeed: 300,
+        submenuWidth: 'auto',
+        doubleClickTime: 500,
+        mobileMenuExpandableSubmenus: true, 
+        relatedContainerForOverlayMenuSelector: '.top',
+   };</script><script defer="defer" src="https://totetmatt.github.io/assets/js/scripts.min.js?v=f4c4d35432d0e17d212f2fae4e0f8247"></script><script>var images = document.querySelectorAll('img[loading]');
+
+        for (var i = 0; i < images.length; i++) {
+            if (images[i].complete) {
+                images[i].classList.add('is-loaded');
+            } else {
+                images[i].addEventListener('load', function () {
+                    this.classList.add('is-loaded');
+                }, false);
+            }
+        }</script></body></html>
