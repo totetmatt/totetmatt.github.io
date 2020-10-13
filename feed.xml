@@ -17,7 +17,7 @@
         <link href="https://totetmatt.github.io/twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file.html"/>
         <id>https://totetmatt.github.io/twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file.html</id>
 
-        <updated>2020-10-13T20:05:48+02:00</updated>
+        <updated>2020-10-13T20:08:29+02:00</updated>
             <summary>
                 <![CDATA[
                     (Using Windows PowerShell, adapt for UNIX bash shouldn’t be a big issue) So something nice with youtube-dl is like you can ask not to download&hellip;
@@ -88,7 +88,7 @@ audio_only        mp4        audio only    2k , mp4a.40.2
             <category term="ffmpeg"/>
             <category term="bash"/>
 
-        <updated>2020-10-13T20:05:48+02:00</updated>
+        <updated>2020-10-13T20:08:29+02:00</updated>
             <summary>
                 <![CDATA[
                     Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of&hellip;
@@ -225,7 +225,7 @@ rm tmp_out*</code></pre>
         <id>https://totetmatt.github.io/bash-sort-2.html</id>
             <category term="bash"/>
 
-        <updated>2020-10-13T20:05:48+02:00</updated>
+        <updated>2020-10-13T20:08:29+02:00</updated>
             <summary>
                 <![CDATA[
                     From time to time, we got some code challenge / codekata at work. The concept is simple it’s just some simple problem to sovles so&hellip;
@@ -311,7 +311,7 @@ The Last Jedi (2017)</code></pre>
             <category term="video"/>
             <category term="ffmpeg"/>
 
-        <updated>2020-10-13T20:05:48+02:00</updated>
+        <updated>2020-10-13T20:08:29+02:00</updated>
             <summary>
                 <![CDATA[
                     Some findings and command line I'm using regularly with ffmpeg. http://www.astro-electronic.de/FFmpeg_Book.pdf https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/ ffmpeg -i inputd.mp4 -filter_complex "[0:v] fps=12,scale=w=480:h=-1,split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1" output.gif https://superuser.com/questions/777938/ffmpeg-convert-a-video-to-a-timelapse ffmpeg&hellip;
@@ -343,7 +343,7 @@ The Last Jedi (2017)</code></pre>
         <link href="https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html"/>
         <id>https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html</id>
 
-        <updated>2020-10-13T20:05:48+02:00</updated>
+        <updated>2020-10-13T20:08:29+02:00</updated>
             <summary>
                 <![CDATA[
                     If you work on Machine Learning / Deep Learning with Keras, you can export the model in a dot file. And guess what ? Gephi&hellip;
@@ -377,7 +377,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
         <id>https://totetmatt.github.io/twitter-streaming-importer-naoyun-as-a-gephi-plugin.html</id>
             <category term="Gephi"/>
 
-        <updated>2020-10-13T20:05:48+02:00</updated>
+        <updated>2020-10-13T20:08:29+02:00</updated>
             <summary>
                 <![CDATA[
                     Hello everybody ! Great news today, almost a 5 years acheivement : Twitter Streaming Importer is out. It uses the Twitter Stream API to get&hellip;
@@ -421,7 +421,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
             <category term="Rfc"/>
             <category term="Gephi"/>
 
-        <updated>2020-10-13T20:05:48+02:00</updated>
+        <updated>2020-10-13T20:08:29+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/38/RFC.jpg" alt="" />
@@ -447,7 +447,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
             <category term="Stream"/>
             <category term="Gephi"/>
 
-        <updated>2020-10-13T20:05:48+02:00</updated>
+        <updated>2020-10-13T20:08:29+02:00</updated>
             <summary>
                 <![CDATA[
                     We saw that we can use Gephi Streaming Plugin to push data into Gephi. It works well , but it brings a lot of constrains&hellip;
@@ -568,7 +568,7 @@ With the release of Gephi 0.9 approaching, and the various change it will bring,
             <category term="Gephi"/>
             <category term="Dbpedia"/>
 
-        <updated>2020-10-13T20:05:48+02:00</updated>
+        <updated>2020-10-13T20:08:29+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/34/1386271588578.jpg" alt="" />
@@ -702,7 +702,7 @@ WHERE
         <link href="https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html"/>
         <id>https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html</id>
 
-        <updated>2020-10-13T20:05:48+02:00</updated>
+        <updated>2020-10-13T20:08:29+02:00</updated>
             <summary>
                 <![CDATA[
                     Recurent issue with Gephi is the new Java 8 verison which Gephi does'nt really like. The simple alternative is to keep or reinstall Java 7,&hellip;

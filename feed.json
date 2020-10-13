@@ -20,8 +20,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-10-13T20:05:48+02:00",
-            "date_modified": "2020-10-13T20:05:48+02:00"
+            "date_published": "2020-10-13T20:08:29+02:00",
+            "date_modified": "2020-10-13T20:08:29+02:00"
         },
         {
             "id": "https://totetmatt.github.io/extract-chapters-youtube-media.html",
@@ -37,8 +37,8 @@
                    "ffmpeg",
                    "bash"
             ],
-            "date_published": "2020-10-13T20:05:48+02:00",
-            "date_modified": "2020-10-13T20:05:48+02:00"
+            "date_published": "2020-10-13T20:08:29+02:00",
+            "date_modified": "2020-10-13T20:08:29+02:00"
         },
         {
             "id": "https://totetmatt.github.io/bash-sort-2.html",
@@ -52,8 +52,8 @@
             "tags": [
                    "bash"
             ],
-            "date_published": "2020-10-13T20:05:48+02:00",
-            "date_modified": "2020-10-13T20:05:48+02:00"
+            "date_published": "2020-10-13T20:08:29+02:00",
+            "date_modified": "2020-10-13T20:08:29+02:00"
         },
         {
             "id": "https://totetmatt.github.io/ffmpeg.html",
@@ -68,8 +68,8 @@
                    "video",
                    "ffmpeg"
             ],
-            "date_published": "2020-10-13T20:05:48+02:00",
-            "date_modified": "2020-10-13T20:05:48+02:00"
+            "date_published": "2020-10-13T20:08:29+02:00",
+            "date_modified": "2020-10-13T20:08:29+02:00"
         },
         {
             "id": "https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html",
@@ -82,8 +82,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-10-13T20:05:48+02:00",
-            "date_modified": "2020-10-13T20:05:48+02:00"
+            "date_published": "2020-10-13T20:08:29+02:00",
+            "date_modified": "2020-10-13T20:08:29+02:00"
         },
         {
             "id": "https://totetmatt.github.io/twitter-streaming-importer-naoyun-as-a-gephi-plugin.html",
@@ -97,8 +97,8 @@
             "tags": [
                    "Gephi"
             ],
-            "date_published": "2020-10-13T20:05:48+02:00",
-            "date_modified": "2020-10-13T20:05:48+02:00"
+            "date_published": "2020-10-13T20:08:29+02:00",
+            "date_modified": "2020-10-13T20:08:29+02:00"
         },
         {
             "id": "https://totetmatt.github.io/request-for-comments-reference-map.html",
@@ -114,8 +114,8 @@
                    "Rfc",
                    "Gephi"
             ],
-            "date_published": "2020-10-13T20:05:48+02:00",
-            "date_modified": "2020-10-13T20:05:48+02:00"
+            "date_published": "2020-10-13T20:08:29+02:00",
+            "date_modified": "2020-10-13T20:08:29+02:00"
         },
         {
             "id": "https://totetmatt.github.io/the-final-hack-of-the-gephi-streaming-plugin.html",
@@ -130,8 +130,8 @@
                    "Stream",
                    "Gephi"
             ],
-            "date_published": "2020-10-13T20:05:48+02:00",
-            "date_modified": "2020-10-13T20:05:48+02:00"
+            "date_published": "2020-10-13T20:08:29+02:00",
+            "date_modified": "2020-10-13T20:08:29+02:00"
         },
         {
             "id": "https://totetmatt.github.io/lets-play-gephi-dbpedia-rdf-sparql-and-your-favorite-actors.html",
@@ -149,8 +149,8 @@
                    "Gephi",
                    "Dbpedia"
             ],
-            "date_published": "2020-10-13T20:05:48+02:00",
-            "date_modified": "2020-10-13T20:05:48+02:00"
+            "date_published": "2020-10-13T20:08:29+02:00",
+            "date_modified": "2020-10-13T20:08:29+02:00"
         },
         {
             "id": "https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html",
@@ -163,8 +163,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-10-13T20:05:48+02:00",
-            "date_modified": "2020-10-13T20:05:48+02:00"
+            "date_published": "2020-10-13T20:08:29+02:00",
+            "date_modified": "2020-10-13T20:08:29+02:00"
         }
     ]
 }
