@@ -10,6 +10,74 @@
     <id>https://totetmatt.github.io</id>
 
     <entry>
+        <title>Twitch and FFmpeg and Youtube-dl:  Fetch from live stream to local file</title>
+        <author>
+            <name>Totetmatt</name>
+        </author>
+        <link href="https://totetmatt.github.io/twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file.html"/>
+        <id>https://totetmatt.github.io/twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file.html</id>
+
+        <updated>2020-10-13T20:05:48+02:00</updated>
+            <summary>
+                <![CDATA[
+                    (Using Windows PowerShell, adapt for UNIX bash shouldn’t be a big issue) So something nice with youtube-dl is like you can ask not to download&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p><em>(Using Windows PowerShell, adapt for UNIX bash shouldn’t be a big issue)</em> </p>
+<h1 id="record-a-live-stream">Record a live stream</h1>
+<p>So something nice with youtube-dl is like you can ask not to download the media but to fetch for the media link :</p>
+<pre><code>&gt;&gt; youtube-dl -g http://something
+youtube-dl -g https://www.youtube.com/watch?v=RJt01u4yrLQ
+https://r2---sn-h0jeened.googlevideo.com/videoplayback?expire=1[...]</code></pre><p>If you use that for a twitch channel that is streaming live, it returns you the HLS stream.</p>
+<pre><code>&gt;&gt; youtube-dl -g https://www.twitch.tv/farore_de_firone
+https://video-weaver.ber01.hls.ttvnw.net/v1/playlist/CpkEQusnrcdffNI3[..]MA2c4.m3u8</code></pre><p>It by default binds to the best quality video, but you can check and select all format available using <code>-F</code></p>
+<pre><code>&gt;&gt; youtube-dl -F https://www.twitch.tv/farore_de_firone
+[twitch:stream] farore_de_firone: Downloading stream GraphQL
+[twitch:stream] farore_de_firone: Downloading access token JSON
+[twitch:stream] 39653517372: Downloading m3u8 information
+[info] Available formats for 39653517372:
+format code       extension  resolution note
+audio_only        mp4        audio only    2k , mp4a.40.2
+160p              mp4        284x160     230k , avc1.4D401F, 30.0fps, mp4a.40.2
+360p              mp4        640x360     630k , avc1.4D401F, 30.0fps, mp4a.40.2
+480p              mp4        852x480    1262k , avc1.4D401F, 30.0fps, mp4a.40.2
+720p60            mp4        1280x720   3257k , avc1.4D401F, 60.0fps, mp4a.40.2
+1080p60__source_  mp4        1920x1080  6713k , avc1.64002A, 60.0fps, mp4a.40.2 (best)</code></pre><p><em>You could even only have the audio-stream</em></p>
+<p>And to select it </p>
+<pre><code>&gt;&gt; youtube-dl -f 160p -g https://www.twitch.tv/farore_de_firone</code></pre><p>So with this link, you can use ffmpeg to record localy the stream to your computer (and have your own reaplay / VOD without the “disagreement” of Twitch VOD :) )</p>
+<pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -f 720p60 -g https://www.twitch.tv/farore_de_firone)&quot; -c copy stream.20201012.mp4</code></pre><p>And here it’s quite simple “dump” of the running script. Nothing prevent you to add some filters, reencoding that adapt to your needs.</p>
+<h1 id="mixing-multiple-stream">Mixing multiple stream</h1>
+<p>Let’s have some fun, there is some streamers that plays together on the same game. Usually, you can watch their POV at the sametime with the <strong>Twitch Squad</strong> mechanism or <strong>Multitwitch</strong> application. But would it be possible to record a file in such way ? </p>
+<p>Actually yes, ffmpeg can take multiple video input and transform it on the fly via the filter complex to render all the video on the same stream.</p>
+<p>There is a nice topic on Stackoverflow that explain how to simply stack multiple video : <a href="https://stackoverflow.com/questions/11552565/vertically-or-horizontally-stack-mosaic-several-videos-using-ffmpeg">https://stackoverflow.com/questions/11552565/vertically-or-horizontally-stack-mosaic-several-videos-using-ffmpeg</a></p>
+<p>Example merging 2 videos :</p>
+<pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -g https://www.twitch.tv/antoinedaniellive)&quot; \
+                   -i &quot;$(youtube-dl -g https://www.twitch.tv/soon)&quot; \
+                                     -filter_complex vstack=inputs=2 \
+                                     -map 0:a \
+                                     output.mp4</code></pre><p>Example merging 4 videos : </p>
+<pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/antoinedaniellive)&quot; \
+       -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/soon)&quot; \
+       -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/angledroit )&quot; \
+       -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/etoiles)&quot; \
+       -filter_complex &quot;[0:v][1:v][2:v][3:v]xstack=inputs=4:layout=0_0|w0_0|0_h0|w0_h0[v]&quot;  -map &quot;[v]&quot; \
+       -map 0:a \
+       -y output.mp4</code></pre><p><em>Note</em> : it’s better to stack video vertically. Horizontal stack does works but then some services (like twitter) won’t accept the video because the image ratio will be too extreme.</p>
+<p>The <code>-map 0:a</code> here is necessary to select which audio you want to have.</p>
+<p>The format mkv also allow to record multiple video stream within one file that you can selected after that : </p>
+<pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -g https://www.twitch.tv/alphacast)&quot; \ 
+             -i &quot;$(youtube-dl -g https://www.twitch.tv/colas_bim)&quot; \
+                         -i &quot;$(youtube-dl -g https://www.twitch.tv/eventisfr)&quot; \
+                         -i &quot;$(youtube-dl -g https://www.twitch.tv/fusiow)&quot; \
+                         -map 0:1 -map 1:1 -map 2:1 -map 3:1 -map 0:0 \ 
+                         -c copy \
+                         out.mkv</code></pre>
+            ]]>
+        </content>
+    </entry>
+    <entry>
         <title>Extract chapters from Youtube Media</title>
         <author>
             <name>Totetmatt</name>
@@ -20,7 +88,7 @@
             <category term="ffmpeg"/>
             <category term="bash"/>
 
-        <updated>2020-06-26T10:39:30+02:00</updated>
+        <updated>2020-10-13T20:05:48+02:00</updated>
             <summary>
                 <![CDATA[
                     Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of&hellip;
@@ -157,7 +225,7 @@ rm tmp_out*</code></pre>
         <id>https://totetmatt.github.io/bash-sort-2.html</id>
             <category term="bash"/>
 
-        <updated>2020-06-26T10:39:30+02:00</updated>
+        <updated>2020-10-13T20:05:48+02:00</updated>
             <summary>
                 <![CDATA[
                     From time to time, we got some code challenge / codekata at work. The concept is simple it’s just some simple problem to sovles so&hellip;
@@ -243,7 +311,7 @@ The Last Jedi (2017)</code></pre>
             <category term="video"/>
             <category term="ffmpeg"/>
 
-        <updated>2020-06-26T10:39:30+02:00</updated>
+        <updated>2020-10-13T20:05:48+02:00</updated>
             <summary>
                 <![CDATA[
                     Some findings and command line I'm using regularly with ffmpeg. http://www.astro-electronic.de/FFmpeg_Book.pdf https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/ ffmpeg -i inputd.mp4 -filter_complex "[0:v] fps=12,scale=w=480:h=-1,split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1" output.gif https://superuser.com/questions/777938/ffmpeg-convert-a-video-to-a-timelapse ffmpeg&hellip;
@@ -275,7 +343,7 @@ The Last Jedi (2017)</code></pre>
         <link href="https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html"/>
         <id>https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html</id>
 
-        <updated>2020-06-26T10:39:30+02:00</updated>
+        <updated>2020-10-13T20:05:48+02:00</updated>
             <summary>
                 <![CDATA[
                     If you work on Machine Learning / Deep Learning with Keras, you can export the model in a dot file. And guess what ? Gephi&hellip;
@@ -309,7 +377,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
         <id>https://totetmatt.github.io/twitter-streaming-importer-naoyun-as-a-gephi-plugin.html</id>
             <category term="Gephi"/>
 
-        <updated>2020-06-26T10:39:30+02:00</updated>
+        <updated>2020-10-13T20:05:48+02:00</updated>
             <summary>
                 <![CDATA[
                     Hello everybody ! Great news today, almost a 5 years acheivement : Twitter Streaming Importer is out. It uses the Twitter Stream API to get&hellip;
@@ -353,7 +421,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
             <category term="Rfc"/>
             <category term="Gephi"/>
 
-        <updated>2020-06-26T10:39:30+02:00</updated>
+        <updated>2020-10-13T20:05:48+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/38/RFC.jpg" alt="" />
@@ -379,7 +447,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
             <category term="Stream"/>
             <category term="Gephi"/>
 
-        <updated>2020-06-26T10:39:30+02:00</updated>
+        <updated>2020-10-13T20:05:48+02:00</updated>
             <summary>
                 <![CDATA[
                     We saw that we can use Gephi Streaming Plugin to push data into Gephi. It works well , but it brings a lot of constrains&hellip;
@@ -500,7 +568,7 @@ With the release of Gephi 0.9 approaching, and the various change it will bring,
             <category term="Gephi"/>
             <category term="Dbpedia"/>
 
-        <updated>2020-06-26T10:39:30+02:00</updated>
+        <updated>2020-10-13T20:05:48+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/34/1386271588578.jpg" alt="" />
@@ -634,7 +702,7 @@ WHERE
         <link href="https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html"/>
         <id>https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html</id>
 
-        <updated>2020-06-26T10:39:30+02:00</updated>
+        <updated>2020-10-13T20:05:48+02:00</updated>
             <summary>
                 <![CDATA[
                     Recurent issue with Gephi is the new Java 8 verison which Gephi does'nt really like. The simple alternative is to keep or reinstall Java 7,&hellip;
@@ -672,30 +740,6 @@ The procedure I'll explain is on Windows, but MacOS will be same and Linux user 
 <p>With this method, you can have a default Java 8 version for all your computer and all your applications, but <span style="text-decoration: underline;"><strong>Gephi only</strong></span> will rely on this Java 7.</p>
 <p>If you are "reinstalling" Java 7 by replacing Java 8, the default Java version will be an <strong><span style="text-decoration: underline;">out dated version of java</span></strong>, which expose your system to vulnerabilities &amp; security flaws. And that's bad.</p>
 
-
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>(Force) Atlas of Europe</title>
-        <author>
-            <name>Totetmatt</name>
-        </author>
-        <link href="https://totetmatt.github.io/force-atlas-of-europe.html"/>
-        <id>https://totetmatt.github.io/force-atlas-of-europe.html</id>
-
-        <updated>2020-06-26T10:39:30+02:00</updated>
-            <summary>
-                <![CDATA[
-                        <img src="https://totetmatt.github.io/media/posts/35/Europa_Force_Atlas.jpg" alt="" />
-                     Based on Nomenclature of Territorial Units for Statistics
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                    <img src="https://totetmatt.github.io/media/posts/35/Europa_Force_Atlas.jpg" alt="" />
-                <figure class="alignnone size-medium wp-image-490"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Europa_Force_Atlas.jpg"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/35/Europa_Force_Atlas-291x300.jpg" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-xs.jpg 300w ,https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-sm.jpg 480w ,https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-md.jpg 768w ,https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-lg.jpg 1024w ,https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-xl.jpg 1360w ,https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-2xl.jpg 1600w"  alt="Europa_Force_Atlas" width="291" height="300" /></figure></a></p>
-<p>Based on <a href="https://en.wikipedia.org/wiki/Nomenclature_of_Territorial_Units_for_Statistics">Nomenclature of Territorial Units for Statistics</a></p>
 
             ]]>
         </content>

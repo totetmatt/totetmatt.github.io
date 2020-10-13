@@ -10,6 +10,20 @@
     },
     "items": [
         {
+            "id": "https://totetmatt.github.io/twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file.html",
+            "url": "https://totetmatt.github.io/twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file.html",
+            "title": "Twitch and FFmpeg and Youtube-dl:  Fetch from live stream to local file",
+            "summary": "(Using Windows PowerShell, adapt for UNIX bash shouldn’t be a big issue) So something nice with youtube-dl is like you can ask not to download&hellip;",
+            "content_html": "<p><em>(Using Windows PowerShell, adapt for UNIX bash shouldn’t be a big issue)</em> </p>\n<h1 id=\"record-a-live-stream\">Record a live stream</h1>\n<p>So something nice with youtube-dl is like you can ask not to download the media but to fetch for the media link :</p>\n<pre><code>&gt;&gt; youtube-dl -g http://something\nyoutube-dl -g https://www.youtube.com/watch?v=RJt01u4yrLQ\nhttps://r2---sn-h0jeened.googlevideo.com/videoplayback?expire=1[...]</code></pre><p>If you use that for a twitch channel that is streaming live, it returns you the HLS stream.</p>\n<pre><code>&gt;&gt; youtube-dl -g https://www.twitch.tv/farore_de_firone\nhttps://video-weaver.ber01.hls.ttvnw.net/v1/playlist/CpkEQusnrcdffNI3[..]MA2c4.m3u8</code></pre><p>It by default binds to the best quality video, but you can check and select all format available using <code>-F</code></p>\n<pre><code>&gt;&gt; youtube-dl -F https://www.twitch.tv/farore_de_firone\n[twitch:stream] farore_de_firone: Downloading stream GraphQL\n[twitch:stream] farore_de_firone: Downloading access token JSON\n[twitch:stream] 39653517372: Downloading m3u8 information\n[info] Available formats for 39653517372:\nformat code       extension  resolution note\naudio_only        mp4        audio only    2k , mp4a.40.2\n160p              mp4        284x160     230k , avc1.4D401F, 30.0fps, mp4a.40.2\n360p              mp4        640x360     630k , avc1.4D401F, 30.0fps, mp4a.40.2\n480p              mp4        852x480    1262k , avc1.4D401F, 30.0fps, mp4a.40.2\n720p60            mp4        1280x720   3257k , avc1.4D401F, 60.0fps, mp4a.40.2\n1080p60__source_  mp4        1920x1080  6713k , avc1.64002A, 60.0fps, mp4a.40.2 (best)</code></pre><p><em>You could even only have the audio-stream</em></p>\n<p>And to select it </p>\n<pre><code>&gt;&gt; youtube-dl -f 160p -g https://www.twitch.tv/farore_de_firone</code></pre><p>So with this link, you can use ffmpeg to record localy the stream to your computer (and have your own reaplay / VOD without the “disagreement” of Twitch VOD :) )</p>\n<pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -f 720p60 -g https://www.twitch.tv/farore_de_firone)&quot; -c copy stream.20201012.mp4</code></pre><p>And here it’s quite simple “dump” of the running script. Nothing prevent you to add some filters, reencoding that adapt to your needs.</p>\n<h1 id=\"mixing-multiple-stream\">Mixing multiple stream</h1>\n<p>Let’s have some fun, there is some streamers that plays together on the same game. Usually, you can watch their POV at the sametime with the <strong>Twitch Squad</strong> mechanism or <strong>Multitwitch</strong> application. But would it be possible to record a file in such way ? </p>\n<p>Actually yes, ffmpeg can take multiple video input and transform it on the fly via the filter complex to render all the video on the same stream.</p>\n<p>There is a nice topic on Stackoverflow that explain how to simply stack multiple video : <a href=\"https://stackoverflow.com/questions/11552565/vertically-or-horizontally-stack-mosaic-several-videos-using-ffmpeg\">https://stackoverflow.com/questions/11552565/vertically-or-horizontally-stack-mosaic-several-videos-using-ffmpeg</a></p>\n<p>Example merging 2 videos :</p>\n<pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -g https://www.twitch.tv/antoinedaniellive)&quot; \\\n                   -i &quot;$(youtube-dl -g https://www.twitch.tv/soon)&quot; \\\n                                     -filter_complex vstack=inputs=2 \\\n                                     -map 0:a \\\n                                     output.mp4</code></pre><p>Example merging 4 videos : </p>\n<pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/antoinedaniellive)&quot; \\\n       -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/soon)&quot; \\\n       -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/angledroit )&quot; \\\n       -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/etoiles)&quot; \\\n       -filter_complex &quot;[0:v][1:v][2:v][3:v]xstack=inputs=4:layout=0_0|w0_0|0_h0|w0_h0[v]&quot;  -map &quot;[v]&quot; \\\n       -map 0:a \\\n       -y output.mp4</code></pre><p><em>Note</em> : it’s better to stack video vertically. Horizontal stack does works but then some services (like twitter) won’t accept the video because the image ratio will be too extreme.</p>\n<p>The <code>-map 0:a</code> here is necessary to select which audio you want to have.</p>\n<p>The format mkv also allow to record multiple video stream within one file that you can selected after that : </p>\n<pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -g https://www.twitch.tv/alphacast)&quot; \\ \n             -i &quot;$(youtube-dl -g https://www.twitch.tv/colas_bim)&quot; \\\n                         -i &quot;$(youtube-dl -g https://www.twitch.tv/eventisfr)&quot; \\\n                         -i &quot;$(youtube-dl -g https://www.twitch.tv/fusiow)&quot; \\\n                         -map 0:1 -map 1:1 -map 2:1 -map 3:1 -map 0:0 \\ \n                         -c copy \\\n                         out.mkv</code></pre>",
+            "author": {
+                "name": "Totetmatt"
+            },
+            "tags": [
+            ],
+            "date_published": "2020-10-13T20:05:48+02:00",
+            "date_modified": "2020-10-13T20:05:48+02:00"
+        },
+        {
             "id": "https://totetmatt.github.io/extract-chapters-youtube-media.html",
             "url": "https://totetmatt.github.io/extract-chapters-youtube-media.html",
             "title": "Extract chapters from Youtube Media",
@@ -23,8 +37,8 @@
                    "ffmpeg",
                    "bash"
             ],
-            "date_published": "2020-06-26T10:39:30+02:00",
-            "date_modified": "2020-06-26T10:39:30+02:00"
+            "date_published": "2020-10-13T20:05:48+02:00",
+            "date_modified": "2020-10-13T20:05:48+02:00"
         },
         {
             "id": "https://totetmatt.github.io/bash-sort-2.html",
@@ -38,8 +52,8 @@
             "tags": [
                    "bash"
             ],
-            "date_published": "2020-06-26T10:39:30+02:00",
-            "date_modified": "2020-06-26T10:39:30+02:00"
+            "date_published": "2020-10-13T20:05:48+02:00",
+            "date_modified": "2020-10-13T20:05:48+02:00"
         },
         {
             "id": "https://totetmatt.github.io/ffmpeg.html",
@@ -54,8 +68,8 @@
                    "video",
                    "ffmpeg"
             ],
-            "date_published": "2020-06-26T10:39:30+02:00",
-            "date_modified": "2020-06-26T10:39:30+02:00"
+            "date_published": "2020-10-13T20:05:48+02:00",
+            "date_modified": "2020-10-13T20:05:48+02:00"
         },
         {
             "id": "https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html",
@@ -68,8 +82,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-06-26T10:39:30+02:00",
-            "date_modified": "2020-06-26T10:39:30+02:00"
+            "date_published": "2020-10-13T20:05:48+02:00",
+            "date_modified": "2020-10-13T20:05:48+02:00"
         },
         {
             "id": "https://totetmatt.github.io/twitter-streaming-importer-naoyun-as-a-gephi-plugin.html",
@@ -83,8 +97,8 @@
             "tags": [
                    "Gephi"
             ],
-            "date_published": "2020-06-26T10:39:30+02:00",
-            "date_modified": "2020-06-26T10:39:30+02:00"
+            "date_published": "2020-10-13T20:05:48+02:00",
+            "date_modified": "2020-10-13T20:05:48+02:00"
         },
         {
             "id": "https://totetmatt.github.io/request-for-comments-reference-map.html",
@@ -100,8 +114,8 @@
                    "Rfc",
                    "Gephi"
             ],
-            "date_published": "2020-06-26T10:39:30+02:00",
-            "date_modified": "2020-06-26T10:39:30+02:00"
+            "date_published": "2020-10-13T20:05:48+02:00",
+            "date_modified": "2020-10-13T20:05:48+02:00"
         },
         {
             "id": "https://totetmatt.github.io/the-final-hack-of-the-gephi-streaming-plugin.html",
@@ -116,8 +130,8 @@
                    "Stream",
                    "Gephi"
             ],
-            "date_published": "2020-06-26T10:39:30+02:00",
-            "date_modified": "2020-06-26T10:39:30+02:00"
+            "date_published": "2020-10-13T20:05:48+02:00",
+            "date_modified": "2020-10-13T20:05:48+02:00"
         },
         {
             "id": "https://totetmatt.github.io/lets-play-gephi-dbpedia-rdf-sparql-and-your-favorite-actors.html",
@@ -135,8 +149,8 @@
                    "Gephi",
                    "Dbpedia"
             ],
-            "date_published": "2020-06-26T10:39:30+02:00",
-            "date_modified": "2020-06-26T10:39:30+02:00"
+            "date_published": "2020-10-13T20:05:48+02:00",
+            "date_modified": "2020-10-13T20:05:48+02:00"
         },
         {
             "id": "https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html",
@@ -149,23 +163,8 @@
             },
             "tags": [
             ],
-            "date_published": "2020-06-26T10:39:30+02:00",
-            "date_modified": "2020-06-26T10:39:30+02:00"
-        },
-        {
-            "id": "https://totetmatt.github.io/force-atlas-of-europe.html",
-            "url": "https://totetmatt.github.io/force-atlas-of-europe.html",
-            "title": "(Force) Atlas of Europe",
-            "summary": " Based on Nomenclature of Territorial Units for Statistics",
-            "content_html": "<figure class=\"alignnone size-medium wp-image-490\"><a href=\"http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Europa_Force_Atlas.jpg\"><img loading=\"lazy\"  src=\"https://totetmatt.github.io/media/posts/35/Europa_Force_Atlas-291x300.jpg\" sizes=\"(max-width: 48em) 100vw, 768px\" srcset=\"https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-xs.jpg 300w ,https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-sm.jpg 480w ,https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-md.jpg 768w ,https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-lg.jpg 1024w ,https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-xl.jpg 1360w ,https://totetmatt.github.io/media/posts/35/responsive/Europa_Force_Atlas-291x300-2xl.jpg 1600w\"  alt=\"Europa_Force_Atlas\" width=\"291\" height=\"300\" /></figure></a></p>\n<p>Based on <a href=\"https://en.wikipedia.org/wiki/Nomenclature_of_Territorial_Units_for_Statistics\">Nomenclature of Territorial Units for Statistics</a></p>\n",
-            "image": "https://totetmatt.github.io/media/posts/35/Europa_Force_Atlas.jpg",
-            "author": {
-                "name": "Totetmatt"
-            },
-            "tags": [
-            ],
-            "date_published": "2020-06-26T10:39:30+02:00",
-            "date_modified": "2020-06-26T10:39:30+02:00"
+            "date_published": "2020-10-13T20:05:48+02:00",
+            "date_modified": "2020-10-13T20:05:48+02:00"
         }
     ]
 }
