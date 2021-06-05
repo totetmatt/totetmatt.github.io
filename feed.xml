@@ -3,7 +3,7 @@
     <title>Toto do stuff</title>
     <link href="https://totetmatt.github.io/feed.xml" rel="self" />
     <link href="https://totetmatt.github.io" />
-    <updated>1970-01-01T01:00:00+01:00</updated>
+    <updated>2020-10-13T20:04:57+02:00</updated>
     <author>
         <name>Totetmatt</name>
     </author>
@@ -17,7 +17,7 @@
         <link href="https://totetmatt.github.io/twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file.html"/>
         <id>https://totetmatt.github.io/twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file.html</id>
 
-        <updated>2020-10-13T20:08:29+02:00</updated>
+        <updated>2020-10-13T20:04:57+02:00</updated>
             <summary>
                 <![CDATA[
                     (Using Windows PowerShell, adapt for UNIX bash shouldn’t be a big issue) So something nice with youtube-dl is like you can ask not to download&hellip;
@@ -30,9 +30,13 @@
 <p>So something nice with youtube-dl is like you can ask not to download the media but to fetch for the media link :</p>
 <pre><code>&gt;&gt; youtube-dl -g http://something
 youtube-dl -g https://www.youtube.com/watch?v=RJt01u4yrLQ
-https://r2---sn-h0jeened.googlevideo.com/videoplayback?expire=1[...]</code></pre><p>If you use that for a twitch channel that is streaming live, it returns you the HLS stream.</p>
+https://r2---sn-h0jeened.googlevideo.com/videoplayback?expire=1[...]
+</code></pre>
+<p>If you use that for a twitch channel that is streaming live, it returns you the HLS stream.</p>
 <pre><code>&gt;&gt; youtube-dl -g https://www.twitch.tv/farore_de_firone
-https://video-weaver.ber01.hls.ttvnw.net/v1/playlist/CpkEQusnrcdffNI3[..]MA2c4.m3u8</code></pre><p>It by default binds to the best quality video, but you can check and select all format available using <code>-F</code></p>
+https://video-weaver.ber01.hls.ttvnw.net/v1/playlist/CpkEQusnrcdffNI3[..]MA2c4.m3u8
+</code></pre>
+<p>It by default binds to the best quality video, but you can check and select all format available using <code>-F</code></p>
 <pre><code>&gt;&gt; youtube-dl -F https://www.twitch.tv/farore_de_firone
 [twitch:stream] farore_de_firone: Downloading stream GraphQL
 [twitch:stream] farore_de_firone: Downloading access token JSON
@@ -44,10 +48,16 @@ audio_only        mp4        audio only    2k , mp4a.40.2
 360p              mp4        640x360     630k , avc1.4D401F, 30.0fps, mp4a.40.2
 480p              mp4        852x480    1262k , avc1.4D401F, 30.0fps, mp4a.40.2
 720p60            mp4        1280x720   3257k , avc1.4D401F, 60.0fps, mp4a.40.2
-1080p60__source_  mp4        1920x1080  6713k , avc1.64002A, 60.0fps, mp4a.40.2 (best)</code></pre><p><em>You could even only have the audio-stream</em></p>
+1080p60__source_  mp4        1920x1080  6713k , avc1.64002A, 60.0fps, mp4a.40.2 (best)
+</code></pre>
+<p><em>You could even only have the audio-stream</em></p>
 <p>And to select it </p>
-<pre><code>&gt;&gt; youtube-dl -f 160p -g https://www.twitch.tv/farore_de_firone</code></pre><p>So with this link, you can use ffmpeg to record localy the stream to your computer (and have your own reaplay / VOD without the “disagreement” of Twitch VOD :) )</p>
-<pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -f 720p60 -g https://www.twitch.tv/farore_de_firone)&quot; -c copy stream.20201012.mp4</code></pre><p>And here it’s quite simple “dump” of the running script. Nothing prevent you to add some filters, reencoding that adapt to your needs.</p>
+<pre><code>&gt;&gt; youtube-dl -f 160p -g https://www.twitch.tv/farore_de_firone
+</code></pre>
+<p>So with this link, you can use ffmpeg to record localy the stream to your computer (and have your own reaplay / VOD without the “disagreement” of Twitch VOD :) )</p>
+<pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -f 720p60 -g https://www.twitch.tv/farore_de_firone)&quot; -c copy stream.20201012.mp4
+</code></pre>
+<p>And here it’s quite simple “dump” of the running script. Nothing prevent you to add some filters, reencoding that adapt to your needs.</p>
 <h1 id="mixing-multiple-stream">Mixing multiple stream</h1>
 <p>Let’s have some fun, there is some streamers that plays together on the same game. Usually, you can watch their POV at the sametime with the <strong>Twitch Squad</strong> mechanism or <strong>Multitwitch</strong> application. But would it be possible to record a file in such way ? </p>
 <p>Actually yes, ffmpeg can take multiple video input and transform it on the fly via the filter complex to render all the video on the same stream.</p>
@@ -57,15 +67,19 @@ audio_only        mp4        audio only    2k , mp4a.40.2
                    -i &quot;$(youtube-dl -g https://www.twitch.tv/soon)&quot; \
                                      -filter_complex vstack=inputs=2 \
                                      -map 0:a \
-                                     output.mp4</code></pre><p>Example merging 4 videos : </p>
+                                     output.mp4
+</code></pre>
+<p>Example merging 4 videos : </p>
 <pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/antoinedaniellive)&quot; \
        -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/soon)&quot; \
        -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/angledroit )&quot; \
        -i &quot;$(youtube-dl -f 160p -g https://www.twitch.tv/etoiles)&quot; \
        -filter_complex &quot;[0:v][1:v][2:v][3:v]xstack=inputs=4:layout=0_0|w0_0|0_h0|w0_h0[v]&quot;  -map &quot;[v]&quot; \
        -map 0:a \
-       -y output.mp4</code></pre><p><em>Note</em> : it’s better to stack video vertically. Horizontal stack does works but then some services (like twitter) won’t accept the video because the image ratio will be too extreme.</p>
-<p>The <code>-map 0:a</code> here is necessary to select which audio you want to have.</p>
+       -y output.mp4
+</code></pre>
+<p><em>Note</em> : it’s better to stack video vertically. Horizontal stack does works but then some services (like twitter) won’t accept the video because the image ratio will be too extreme.</p>
+<p>The <code>-map 0:a </code> here is necessary to select which audio you want to have.</p>
 <p>The format mkv also allow to record multiple video stream within one file that you can selected after that : </p>
 <pre><code>&gt;&gt; ffmpeg -i &quot;$(youtube-dl -g https://www.twitch.tv/alphacast)&quot; \ 
              -i &quot;$(youtube-dl -g https://www.twitch.tv/colas_bim)&quot; \
@@ -73,7 +87,9 @@ audio_only        mp4        audio only    2k , mp4a.40.2
                          -i &quot;$(youtube-dl -g https://www.twitch.tv/fusiow)&quot; \
                          -map 0:1 -map 1:1 -map 2:1 -map 3:1 -map 0:0 \ 
                          -c copy \
-                         out.mkv</code></pre>
+                         out.mkv
+</code></pre>
+
             ]]>
         </content>
     </entry>
@@ -88,7 +104,7 @@ audio_only        mp4        audio only    2k , mp4a.40.2
             <category term="ffmpeg"/>
             <category term="bash"/>
 
-        <updated>2020-10-13T20:08:29+02:00</updated>
+        <updated>2020-06-26T10:39:25+02:00</updated>
             <summary>
                 <![CDATA[
                     Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of&hellip;
@@ -104,7 +120,8 @@ audio_only        mp4        audio only    2k , mp4a.40.2
 [download] Destination: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm
 [download] 100% of 3.22MiB in 00:00
 [ffmpeg] Destination: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3
-Deleting original file The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm (pass -k to keep)</code></pre>
+Deleting original file The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm (pass -k to keep)
+</code></pre>
 <p>We will use <a href="https://www.youtube.com/watch?v=HZTStHzWRxM">https://www.youtube.com/watch?v=HZTStHzWRxM</a> as example.</p>
 <p>The command above will download the video file, transcode it to mp3 and also download the metadata in a json format. We have now 2 files :</p>
 <ul>
@@ -114,7 +131,8 @@ Deleting original file The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.web
 <p><code>jq</code> is a wonderful command line to manipulate json on bash. We can for example get the title of the video like this :</p>
 <pre><code class="language-bash">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json | jq -r .title  | sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39;
 
-The_New_Youtube_Chapter_Timestamp_Feature</code></pre>
+The_New_Youtube_Chapter_Timestamp_Feature
+</code></pre>
 <p>The <code>sed</code> here is to make sure we won’t have special characters that might lead to some error later.</p>
 <p>The <code>-r</code> on <code>jq</code> indicate to return “raw text”. By default, <code>jq</code> will use some syntax colorization and keep some  sepcial character that might leads to some issue. </p>
 <p>If available, Youtube-dl info json contains a <code>chapters</code> array that contain all the chapters with their <code>start_time</code> , <code>end_time</code> and <code>title</code> .</p>
@@ -140,7 +158,8 @@ jq -r &#39;.chapters[]&#39;
   &quot;start_time&quot;: 124,
   &quot;end_time&quot;: 180,
   &quot;title&quot;: &quot;Problems / suggestions for the future&quot;
-}</code></pre>
+}
+</code></pre>
 <p>The idea now is to use each dict entry here as parameters for <code>ffmpeg</code> to split the media according to the chapters data. As we are in bash, current json representation will be quite hard to use it like that, so we need to transform a little bit the representation here to use the output of <code>jq</code> in a pipe and in <code>xargs</code>.</p>
 <p>What also we need to take into consideration is that <code>ffmpeg</code> can split a media by giving the option <code>-ss</code> to know where to start and <code>-t</code> to know the <strong>duration</strong> of the cut, <strong>not the end time</strong>. As the information on the json gives us a start and end time, we need to perfom a simple substraction to have the start time and the duration.</p>
 <pre><code class="language-bash">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json  |\
@@ -158,13 +177,15 @@ Slow roll-out
 How it works
 124
 56
-Problems / suggestions for the future</code></pre>
+Problems / suggestions for the future
+</code></pre>
 <p>Thanks to <code>jq</code>, we can perfom simple math operation directly on the command to compute the duration. <code>sed</code> here again is only for cleaning up special characters.</p>
 <p>Now, we can pipe the wonderful <code>xargs</code> to use the output as parameter and trigger a <code>ffmpeg</code> command</p>
 <pre><code class="language-bash">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json|\
 jq -r &#39;.chapters[] | .start_time,.end_time-.start_time,.title &#39; |\
 sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39; |\
-xargs -n3 -t -d&#39;\n&#39; sh -c &#39;ffmpeg -y -ss $0 -i &quot;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&quot; -t $1 -codec:a copy &quot;$2.mp3&quot;&#39;</code></pre>
+xargs -n3 -t -d&#39;\n&#39; sh -c &#39;ffmpeg -y -ss $0 -i &quot;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&quot; -t $1 -codec:a copy &quot;$2.mp3&quot;&#39;
+</code></pre>
 <ul>
 <li><code>-n3</code> indicate to take parameters 3 by 3*</li>
 <li><code>-t</code> is only to debug as it will print each command <code>xargs</code> will execute</li>
@@ -201,7 +222,8 @@ sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39; |\
 xargs -n3 -t -d&#39;\n&#39; sh -c &quot;ffmpeg -y -ss \$0 -i \&quot;$AUDIO\&quot; -to \$1 -codec:a copy  -f mp3  \&quot;$TITLE/\$2.mp3\&quot;&quot;
 
 #Remove tmp file
-rm tmp_out*</code></pre>
+rm tmp_out*
+</code></pre>
 <p>The script file here : <a href="https://gist.github.com/totetmatt/b4bf50c62642e5a9e1bf6365a47e19c6">https://gist.github.com/totetmatt/b4bf50c62642e5a9e1bf6365a47e19c6</a></p>
 <p>No big change on the global approach just something to becareful : Yes, there is a hell quote escape game to play and it might not be pleasant ….</p>
 <p>To explain the last part, as far as I understand it, the string will be evaluated multiple time : </p>
@@ -210,7 +232,8 @@ rm tmp_out*</code></pre>
 <li>Second time will be at <code>xargs / sh -c</code> invokation where then it’s possible to use <code>$0 $1 and $2</code>. But if we don’t escape it first, theses variables will be evaluated at the first round, that’s why we need to backslash it <code>\$0, \$1, \$2</code>.</li>
 </ul>
 <p>You can see the result of the string after the 1st evaluation thanks to the <code>-t</code> option of <code>xargs</code> : </p>
-<pre><code class="language-bash">sh -c &#39;ffmpeg -y -ss $0 -i &quot;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&quot; -to $1 -codec:a copy  -f mp3  &quot;The_New_Youtube_Chapter_Timestamp_Feature/$2.mp3&quot;&#39; 124 56 Problems___suggestions_for_the_future</code></pre>
+<pre><code class="language-bash">sh -c &#39;ffmpeg -y -ss $0 -i &quot;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&quot; -to $1 -codec:a copy  -f mp3  &quot;The_New_Youtube_Chapter_Timestamp_Feature/$2.mp3&quot;&#39; 124 56 Problems___suggestions_for_the_future
+</code></pre>
 <p>There might be other and better way to deal wih the args parsing, the string escape and the string cleanup, but current solution works enough :)</p>
 
             ]]>
@@ -225,7 +248,7 @@ rm tmp_out*</code></pre>
         <id>https://totetmatt.github.io/bash-sort-2.html</id>
             <category term="bash"/>
 
-        <updated>2020-10-13T20:08:29+02:00</updated>
+        <updated>2020-06-20T11:05:49+02:00</updated>
             <summary>
                 <![CDATA[
                     From time to time, we got some code challenge / codekata at work. The concept is simple it’s just some simple problem to sovles so&hellip;
@@ -274,12 +297,14 @@ The Empire Strikes Back (1980)
 Return of the Jedi (1983)
 The Force Awakens (2015)
 The Last Jedi (2017)
-EOL</code></pre>
+EOL
+</code></pre>
 <p>Each line of <code>order.txt</code> tells which line of <code>movies.txt</code> to substitute so we can’t just <code>paste order.txt movies.txt  | sort -n</code> because we need to find a way to extract the <strong>nth</strong> line of the <code>movies.txt</code> </p>
 <p>To do that, we can use <code>sed -n &quot;Np&quot; file</code>, <code>N</code> is the line number to get, <code>p</code> is the sed command to “print”. <code>-n</code> is needed as by default, sed will print the file anyway.</p>
 <pre><code class="language-bash">totetmatt$ sed -n 10p movies.txt
 
-Solo: A Star Wars Story (2018)</code></pre>
+Solo: A Star Wars Story (2018)
+</code></pre>
 <p>We can then wire this with the output of the <code>order.txt</code>  via a pipeline and a <code>xargs</code>. Let’s also add a <code>tee</code> at the end so it stores the result in a file while keeping the possibilites to use the output for other operation.</p>
 <pre><code class="language-bash">cat order.txt  | xargs -I % sed -n &quot;%p&quot; movies.txt  |  tee result.txt
 
@@ -292,10 +317,12 @@ A New Hope (1977)
 The Empire Strikes Back (1980)
 Return of the Jedi (1983)
 The Force Awakens (2015)
-The Last Jedi (2017)</code></pre>
+The Last Jedi (2017)
+</code></pre>
 <p>We could add some automated check to be sure the operation works as expected. Good solution will be to use <code>diff result.txt expect.txt</code> as we have 2 files generated. But let’s say that we don’t have the <code>result.txt</code> , only the command output and still want to use the <code>diff</code> that only accept file as input.</p>
 <p>We can then use <code>&lt;(command)</code> to concider the whole command output as an input file for <code>diff</code>.   </p>
-<pre><code class="language-bash">diff &lt;(cat order.txt  | xargs -I % sed -n &quot;%p&quot; movies.txt | tee result.txt) expect.txt || echo &quot;No ok&quot;</code></pre>
+<pre><code class="language-bash">diff &lt;(cat order.txt  | xargs -I % sed -n &quot;%p&quot; movies.txt | tee result.txt) expect.txt || echo &quot;No ok&quot;
+</code></pre>
 <p><a href="https://gist.github.com/totetmatt/2b4c74eb214fcc6d04ffcd39bdbd43ad">https://gist.github.com/totetmatt/2b4c74eb214fcc6d04ffcd39bdbd43ad</a></p>
 
             ]]>
@@ -311,7 +338,7 @@ The Last Jedi (2017)</code></pre>
             <category term="video"/>
             <category term="ffmpeg"/>
 
-        <updated>2020-10-13T20:08:29+02:00</updated>
+        <updated>2020-06-20T01:38:40+02:00</updated>
             <summary>
                 <![CDATA[
                     Some findings and command line I'm using regularly with ffmpeg. http://www.astro-electronic.de/FFmpeg_Book.pdf https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/ ffmpeg -i inputd.mp4 -filter_complex "[0:v] fps=12,scale=w=480:h=-1,split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1" output.gif https://superuser.com/questions/777938/ffmpeg-convert-a-video-to-a-timelapse ffmpeg&hellip;
@@ -343,7 +370,7 @@ The Last Jedi (2017)</code></pre>
         <link href="https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html"/>
         <id>https://totetmatt.github.io/keras-and-gephi-visualize-your-deep-learning-graph.html</id>
 
-        <updated>2020-10-13T20:08:29+02:00</updated>
+        <updated>2020-06-20T00:35:15+02:00</updated>
             <summary>
                 <![CDATA[
                     If you work on Machine Learning / Deep Learning with Keras, you can export the model in a dot file. And guess what ? Gephi&hellip;
@@ -377,7 +404,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
         <id>https://totetmatt.github.io/twitter-streaming-importer-naoyun-as-a-gephi-plugin.html</id>
             <category term="Gephi"/>
 
-        <updated>2020-10-13T20:08:29+02:00</updated>
+        <updated>2020-06-20T00:35:15+02:00</updated>
             <summary>
                 <![CDATA[
                     Hello everybody ! Great news today, almost a 5 years acheivement : Twitter Streaming Importer is out. It uses the Twitter Stream API to get&hellip;
@@ -421,11 +448,11 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
             <category term="Rfc"/>
             <category term="Gephi"/>
 
-        <updated>2020-10-13T20:08:29+02:00</updated>
+        <updated>2020-06-20T00:35:15+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/38/RFC.jpg" alt="" />
-                     Gexf : https://raw.githubusercontent.com/totetmatt/gexf/master/rfc/rfc.gexf
+                     Gexf : https://raw.githubusercontent.com/totetmatt/gexf/master/rfc/rfc.gexf 
                 ]]>
             </summary>
         <content type="html">
@@ -447,7 +474,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
             <category term="Stream"/>
             <category term="Gephi"/>
 
-        <updated>2020-10-13T20:08:29+02:00</updated>
+        <updated>2020-06-20T00:35:15+02:00</updated>
             <summary>
                 <![CDATA[
                     We saw that we can use Gephi Streaming Plugin to push data into Gephi. It works well , but it brings a lot of constrains&hellip;
@@ -568,11 +595,11 @@ With the release of Gephi 0.9 approaching, and the various change it will bring,
             <category term="Gephi"/>
             <category term="Dbpedia"/>
 
-        <updated>2020-10-13T20:08:29+02:00</updated>
+        <updated>2020-06-20T00:35:15+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/34/1386271588578.jpg" alt="" />
-                    Introduction to conceptsRDF stands for Resource Description Framework . It's a way to represent information of all kinds. It's now a W3C specification and since&hellip;
+                    Introduction to concepts RDF stands for Resource Description Framework . It's a way to represent information of all kinds. It's now a W3C specification and&hellip;
                 ]]>
             </summary>
         <content type="html">
@@ -702,7 +729,7 @@ WHERE
         <link href="https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html"/>
         <id>https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html</id>
 
-        <updated>2020-10-13T20:08:29+02:00</updated>
+        <updated>2020-06-20T00:35:15+02:00</updated>
             <summary>
                 <![CDATA[
                     Recurent issue with Gephi is the new Java 8 verison which Gephi does'nt really like. The simple alternative is to keep or reinstall Java 7,&hellip;
