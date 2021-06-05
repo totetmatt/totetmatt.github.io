@@ -3,12 +3,60 @@
     <title>Toto do stuff</title>
     <link href="https://totetmatt.github.io/feed.xml" rel="self" />
     <link href="https://totetmatt.github.io" />
-    <updated>2020-10-13T20:04:57+02:00</updated>
+    <updated>2021-06-05T10:18:00+02:00</updated>
     <author>
         <name>Totetmatt</name>
     </author>
     <id>https://totetmatt.github.io</id>
 
+    <entry>
+        <title>How to Capture your Bonzomatic with FFmpeg</title>
+        <author>
+            <name>Totetmatt</name>
+        </author>
+        <link href="https://totetmatt.github.io/how-to-capture-your-bonzomatic-with-ffmpeg.html"/>
+        <id>https://totetmatt.github.io/how-to-capture-your-bonzomatic-with-ffmpeg.html</id>
+            <category term="glsl"/>
+            <category term="ffmpeg"/>
+            <category term="bonzomatic"/>
+
+        <updated>2021-06-05T10:18:00+02:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://totetmatt.github.io/media/posts/47/NlXGDH.jpg" alt="le Mandel Dube" />
+                    Got to work on this website https://psenough.github.io/shader_summary/ that try to gather all graphical live coding events performed in the past. Basically, for people that don’t&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <img src="https://totetmatt.github.io/media/posts/47/NlXGDH.jpg" alt="le Mandel Dube" />
+                <p>Got to work on this website <a href="https://psenough.github.io/shader_summary/">https://psenough.github.io/shader_summary/</a> that try to gather all graphical live coding events performed in the past.</p>
+<p>Basically, for people that don’t know, it’s live coding performance done, sometime as a competition, sometime as a jam, where folks create real time graphics stuff.</p>
+<p>One of the common tool used is <a href="https://github.com/TheNuSan/Bonzomatic/releases/tag/v11">Bonzomatic</a> , it’s a simple application that use OpenGL to render a rectangle that fit to the application screen and then you can live edit the Framgment Shader that determine what should be the color of the pixel.</p>
+<p>Problem was we got a lot of entries but no preview images. Which is quite sad for a graphics discipline.</p>
+<p>After spending an afternoon coding into bonzomatic to find a way to export the bufferframe to an image (was almost here, I think I was missing some color format alignment) I thought about maybe a simpler solution using the best tool ever : FFmpeg.</p>
+<p>If we look at the website, there is a way (in Windows at least) to capture an application windows (<a href="https://trac.ffmpeg.org/wiki/Capture/Desktop">https://trac.ffmpeg.org/wiki/Capture/Desktop</a>) .</p>
+<p>So using this <code>gdigrab</code> format and using the window’s name, you can capture the input like this :</p>
+<pre><code class="language-bash">ffmpeg -f gdigrab -i &#39;title=BONZOMATIC - GLFW&#39; -vframes 1 -q:v 2 -y snapshot.jpg
+</code></pre>
+<p>Some notes :</p>
+<ul>
+<li>It will also capture the mouse if it’s inside, so be careful (maybe an option)</li>
+<li>If you don’t use fullscreen, it will capture only the “content” of the window, not the menu bar. Which mean that if you maximise, the output resolution will be the screen resolution minus the menu bar + other window frame.</li>
+<li>You might want to add a <code>-s 1</code> before the input to let the application start and / or let ffmpeg get warm before starting a record</li>
+</ul>
+<p>Of course now you can also export as video.
+Here is an example of a <code>ffmpeg</code> command that render 10 seconds to mp4 :</p>
+<pre><code class="language-bash">ffmpeg -ss 1 -t 10 -y -framerate 60 -f gdigrab -vsync 0 -hwaccel cuda -hwaccel_output_format cuda  -i &#39;title=BONZOMATIC - GLFW&#39;  -c:a copy -c:v h264_nvenc -tune hq -b:v 20M -bufsize 20M -maxrate 50M -qmin 0 -g 250 -bf 3 -b_ref_mode middle -temporal-aq 1 -rc-lookahead 20 -i_qfactor 0.75 -b_qfactor 1.1  out.mp4
+
+# (I copy pasted some config + blind tweak. Can&#39;t really explain the options but was happy with result)
+</code></pre>
+<p>I’m using <code>nvidia_env</code> as it’s much faster for encoding and avoid issues I got with the normal libx264. </p>
+<p>Need to check more in detail for Sound capture at the same time and see if there is different input format to play with.</p>
+
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>Twitch and FFmpeg and Youtube-dl:  Fetch from live stream to local file</title>
         <author>
@@ -717,56 +765,6 @@ WHERE
 <figure class="wp-image-473 size-thumbnail"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Éric_Serra_All.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Éric_Serra_All-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-2xl.png 1600w"  alt="Éric_Serra_All" width="150" height="150" /></figure></a> People + Movies</p>
 <figure class="wp-image-474 size-thumbnail"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Éric_Serra_Movies.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Éric_Serra_Movies-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-2xl.png 1600w"  alt="Éric_Serra_Movies" width="150" height="150" /></figure></a> Movies</p>
 <figure class="wp-image-475 size-thumbnail"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Éric_Serra_Person.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Éric_Serra_Person-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-2xl.png 1600w"  alt="Éric_Serra_Person" width="150" height="150" /></figure></a> People</p>
-
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>Java 7 for Gephi - Brief How To</title>
-        <author>
-            <name>Totetmatt</name>
-        </author>
-        <link href="https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html"/>
-        <id>https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html</id>
-
-        <updated>2020-06-20T00:35:15+02:00</updated>
-            <summary>
-                <![CDATA[
-                    Recurent issue with Gephi is the new Java 8 verison which Gephi does'nt really like. The simple alternative is to keep or reinstall Java 7,&hellip;
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                <p>Recurent issue with Gephi is the new Java 8 verison which Gephi does'nt really like. The simple alternative is to keep or reinstall Java 7, but with the high number of people asking for help, it needs to be demystificated.<br />
-The procedure I'll explain is on Windows, but MacOS will be same and Linux user know how to do it</p>
-<h2>1 - Download Oracle Java</h2>
-<p>Oracle is actually playing with us, because most of search on google will redirect to the announcement of Java discontinuation and link to Java 8 download. Actually Java 7 is still downloadable, but you need to go to the archive part of the web site here :</p>
-<p>http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html</p>
-<p><strong>Pro Tip :</strong></p>
-<ul>
-<li>Take the <strong>Java SE Runtime Environement 7u65</strong>, because it's the latest one downloadable without login. (I got some feeback where people need to login, it's free so if you don't mind you can do it)</li>
-<li>Don't download Development Kit, <strong>Runtime is enought</strong></li>
-<li>Download <strong>*only* </strong>a <strong>.tar.gz</strong> image, I'll explain you why it's important after.</li>
-</ul>
-<h2>2 - Untar the file</h2>
-<p>When it's on your computer, untar (7-zip for Windows, MacOS is native I think) and put somewhere (like C:\Program Files\Java\jre7 or MacOS equivalent)</p>
-<h2>3 - Specify Gephi which Java version to use</h2>
-<ul>
-<li>Open the file <strong>%GephiPath%\etc\gephi.conf</strong></li>
-<li>Be sure to have the line like this in the file :</li>
-</ul>
-<pre style="text-align: center;"><strong>jdkhome="C:\Program Files\Java\jre7"</strong></pre>
-<p>(adapt the path to where you put java)</p>
-<ul>
-<li><strong>Save</strong> the file</li>
-</ul>
-<p>Then should be good, launch Gephi and enjoy.</p>
-
-<h2>Why this method ?</h2>
-<p>The .tar.gz file is actually a "transportable" java runtime, it contain the binaries to run the software, and that's it. No fancy service started for update and etc.</p>
-<p>With this method, you can have a default Java 8 version for all your computer and all your applications, but <span style="text-decoration: underline;"><strong>Gephi only</strong></span> will rely on this Java 7.</p>
-<p>If you are "reinstalling" Java 7 by replacing Java 8, the default Java version will be an <strong><span style="text-decoration: underline;">out dated version of java</span></strong>, which expose your system to vulnerabilities &amp; security flaws. And that's bad.</p>
-
 
             ]]>
         </content>

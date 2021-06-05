@@ -10,6 +10,24 @@
     },
     "items": [
         {
+            "id": "https://totetmatt.github.io/how-to-capture-your-bonzomatic-with-ffmpeg.html",
+            "url": "https://totetmatt.github.io/how-to-capture-your-bonzomatic-with-ffmpeg.html",
+            "title": "How to Capture your Bonzomatic with FFmpeg",
+            "summary": "Got to work on this website https://psenough.github.io/shader_summary/ that try to gather all graphical live coding events performed in the past. Basically, for people that don’t&hellip;",
+            "content_html": "<p>Got to work on this website <a href=\"https://psenough.github.io/shader_summary/\">https://psenough.github.io/shader_summary/</a> that try to gather all graphical live coding events performed in the past.</p>\n<p>Basically, for people that don’t know, it’s live coding performance done, sometime as a competition, sometime as a jam, where folks create real time graphics stuff.</p>\n<p>One of the common tool used is <a href=\"https://github.com/TheNuSan/Bonzomatic/releases/tag/v11\">Bonzomatic</a> , it’s a simple application that use OpenGL to render a rectangle that fit to the application screen and then you can live edit the Framgment Shader that determine what should be the color of the pixel.</p>\n<p>Problem was we got a lot of entries but no preview images. Which is quite sad for a graphics discipline.</p>\n<p>After spending an afternoon coding into bonzomatic to find a way to export the bufferframe to an image (was almost here, I think I was missing some color format alignment) I thought about maybe a simpler solution using the best tool ever : FFmpeg.</p>\n<p>If we look at the website, there is a way (in Windows at least) to capture an application windows (<a href=\"https://trac.ffmpeg.org/wiki/Capture/Desktop\">https://trac.ffmpeg.org/wiki/Capture/Desktop</a>) .</p>\n<p>So using this <code>gdigrab</code> format and using the window’s name, you can capture the input like this :</p>\n<pre><code class=\"language-bash\">ffmpeg -f gdigrab -i &#39;title=BONZOMATIC - GLFW&#39; -vframes 1 -q:v 2 -y snapshot.jpg\n</code></pre>\n<p>Some notes :</p>\n<ul>\n<li>It will also capture the mouse if it’s inside, so be careful (maybe an option)</li>\n<li>If you don’t use fullscreen, it will capture only the “content” of the window, not the menu bar. Which mean that if you maximise, the output resolution will be the screen resolution minus the menu bar + other window frame.</li>\n<li>You might want to add a <code>-s 1</code> before the input to let the application start and / or let ffmpeg get warm before starting a record</li>\n</ul>\n<p>Of course now you can also export as video.\nHere is an example of a <code>ffmpeg</code> command that render 10 seconds to mp4 :</p>\n<pre><code class=\"language-bash\">ffmpeg -ss 1 -t 10 -y -framerate 60 -f gdigrab -vsync 0 -hwaccel cuda -hwaccel_output_format cuda  -i &#39;title=BONZOMATIC - GLFW&#39;  -c:a copy -c:v h264_nvenc -tune hq -b:v 20M -bufsize 20M -maxrate 50M -qmin 0 -g 250 -bf 3 -b_ref_mode middle -temporal-aq 1 -rc-lookahead 20 -i_qfactor 0.75 -b_qfactor 1.1  out.mp4\n\n# (I copy pasted some config + blind tweak. Can&#39;t really explain the options but was happy with result)\n</code></pre>\n<p>I’m using <code>nvidia_env</code> as it’s much faster for encoding and avoid issues I got with the normal libx264. </p>\n<p>Need to check more in detail for Sound capture at the same time and see if there is different input format to play with.</p>\n",
+            "image": "https://totetmatt.github.io/media/posts/47/NlXGDH.jpg",
+            "author": {
+                "name": "Totetmatt"
+            },
+            "tags": [
+                   "glsl",
+                   "ffmpeg",
+                   "bonzomatic"
+            ],
+            "date_published": "2021-06-05T09:52:56+02:00",
+            "date_modified": "2021-06-05T10:18:00+02:00"
+        },
+        {
             "id": "https://totetmatt.github.io/twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file.html",
             "url": "https://totetmatt.github.io/twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file.html",
             "title": "Twitch and FFmpeg and Youtube-dl:  Fetch from live stream to local file",
@@ -150,20 +168,6 @@
                    "Dbpedia"
             ],
             "date_published": "2015-09-06T22:47:55+02:00",
-            "date_modified": "2020-06-20T00:35:15+02:00"
-        },
-        {
-            "id": "https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html",
-            "url": "https://totetmatt.github.io/java-7-for-gephi-brief-how-to.html",
-            "title": "Java 7 for Gephi - Brief How To",
-            "summary": "Recurent issue with Gephi is the new Java 8 verison which Gephi does'nt really like. The simple alternative is to keep or reinstall Java 7,&hellip;",
-            "content_html": "<p>Recurent issue with Gephi is the new Java 8 verison which Gephi does'nt really like. The simple alternative is to keep or reinstall Java 7, but with the high number of people asking for help, it needs to be demystificated.<br />\nThe procedure I'll explain is on Windows, but MacOS will be same and Linux user know how to do it</p>\n<h2>1 - Download Oracle Java</h2>\n<p>Oracle is actually playing with us, because most of search on google will redirect to the announcement of Java discontinuation and link to Java 8 download. Actually Java 7 is still downloadable, but you need to go to the archive part of the web site here :</p>\n<p>http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html</p>\n<p><strong>Pro Tip :</strong></p>\n<ul>\n<li>Take the <strong>Java SE Runtime Environement 7u65</strong>, because it's the latest one downloadable without login. (I got some feeback where people need to login, it's free so if you don't mind you can do it)</li>\n<li>Don't download Development Kit, <strong>Runtime is enought</strong></li>\n<li>Download <strong>*only* </strong>a <strong>.tar.gz</strong> image, I'll explain you why it's important after.</li>\n</ul>\n<h2>2 - Untar the file</h2>\n<p>When it's on your computer, untar (7-zip for Windows, MacOS is native I think) and put somewhere (like C:\\Program Files\\Java\\jre7 or MacOS equivalent)</p>\n<h2>3 - Specify Gephi which Java version to use</h2>\n<ul>\n<li>Open the file <strong>%GephiPath%\\etc\\gephi.conf</strong></li>\n<li>Be sure to have the line like this in the file :</li>\n</ul>\n<pre style=\"text-align: center;\"><strong>jdkhome=\"C:\\Program Files\\Java\\jre7\"</strong></pre>\n<p>(adapt the path to where you put java)</p>\n<ul>\n<li><strong>Save</strong> the file</li>\n</ul>\n<p>Then should be good, launch Gephi and enjoy.</p>\n\n<h2>Why this method ?</h2>\n<p>The .tar.gz file is actually a \"transportable\" java runtime, it contain the binaries to run the software, and that's it. No fancy service started for update and etc.</p>\n<p>With this method, you can have a default Java 8 version for all your computer and all your applications, but <span style=\"text-decoration: underline;\"><strong>Gephi only</strong></span> will rely on this Java 7.</p>\n<p>If you are \"reinstalling\" Java 7 by replacing Java 8, the default Java version will be an <strong><span style=\"text-decoration: underline;\">out dated version of java</span></strong>, which expose your system to vulnerabilities &amp; security flaws. And that's bad.</p>\n\n",
-            "author": {
-                "name": "Totetmatt"
-            },
-            "tags": [
-            ],
-            "date_published": "2015-08-28T23:05:45+02:00",
             "date_modified": "2020-06-20T00:35:15+02:00"
         }
     ]
