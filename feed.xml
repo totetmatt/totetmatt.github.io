@@ -3,12 +3,55 @@
     <title>Toto do stuff</title>
     <link href="https://totetmatt.github.io/feed.xml" rel="self" />
     <link href="https://totetmatt.github.io" />
-    <updated>2021-06-05T10:18:00+02:00</updated>
+    <updated>2022-06-24T17:55:28+02:00</updated>
     <author>
         <name>Totetmatt</name>
     </author>
     <id>https://totetmatt.github.io</id>
 
+    <entry>
+        <title>Gephi&#x27;s Twitter Streaming Importer V2 is Out !</title>
+        <author>
+            <name>Totetmatt</name>
+        </author>
+        <link href="https://totetmatt.github.io/gephis-twitter-streaming-importer-v2-is-out.html"/>
+        <id>https://totetmatt.github.io/gephis-twitter-streaming-importer-v2-is-out.html</id>
+            <category term="twitter"/>
+            <category term="graph"/>
+            <category term="Real-time"/>
+
+        <updated>2022-06-24T17:55:28+02:00</updated>
+            <summary>
+                <![CDATA[
+                        <img src="https://totetmatt.github.io/media/posts/50/KodeLife-2022-05-29-at-20.57.32-0000_2.png" alt="" />
+                    Important notes : The old version of the plugin is deprecated, the latest version will be the 1.4.4 and then won’t be updated anymore. The&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                    <img src="https://totetmatt.github.io/media/posts/50/KodeLife-2022-05-29-at-20.57.32-0000_2.png" alt="" />
+                <p><strong>Important notes</strong> : <em>The old version of the plugin is deprecated, the latest version will be the 1.4.4 and then won’t be updated anymore.</em></p>
+<h1 id="why-a-v2-">Why a V2 ?</h1>
+<p>The old version of the plugin is using the Twitter Streaming API v1 which is currently getting deprecated by twitter, with the consequence that most of the new users of the plugin are getting the famous “HTTP 403” error and can’t get the plugin working.</p>
+<p>The Twitter Streaming Importer V2 is now using the new Twitter API v2. You still need to have a developer account and an application that can use the V2 version of the API (that should be the nominal case now). </p>
+<h1 id="what-changes-">What changes ?</h1>
+<h2 id="bearer-token">Bearer Token</h2>
+<p>The old V1 and the new V2 API are slightly different, so you will need to reconfigure the credentials configuration inside the plugin. Instead of the Access API / Token set of credentials, you now only need the Bearer Token that you can generate and get on your Twitter application account.</p>
+<h2 id="query-rules">Query Rules</h2>
+<p>The “query” is now fully handled by Twitter. The .json file to save your query won’t be backported as there is a fundamentally different approach now to querying the stream on twitter api. Please read how to create rules on the official twitter documentation about filtered streams <a href="https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule">https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule</a> .
+This new way of building rules has multiple advantages,
+The rules are saved and bound to your application / Bearer Token, which means it will stay if you close Gephi and re-open it.
+You can add and remove rules without restarting the running stream
+You can have multiple rules. These rules can be flagged with a ‘tag’.
+The plugin will use these rules tags to create new columns on the nodes so you can check what rules the entity is matching.
+Again, as this mechanism is purely controlled by twitter api, please read the official doc for more detailed information.</p>
+<h2 id="other-details">Other details</h2>
+<p>The api v2 has also changed how twitter retrieves the information. Moreover the plugin has to migrate from using Twitter4J library to official twitter-api-java-sdk (<a href="https://github.com/twitterdev/twitter-api-java-sdk">https://github.com/twitterdev/twitter-api-java-sdk</a> ) .These changes implied rewriting the networklogic to support the new way data is getting gathered.  Fortunately it was not that hard to do the rewriting and was also a chance to review some of the logic to fix some bugs. The networklogic should react mostly the same way as on the old version.</p>
+<p>During the rewriting, some minor optimisation has been done, notably the issue that the creation of the entities shouldn’t be now too much behind when using Force Atlas.</p>
+
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>How to Capture your Bonzomatic with FFmpeg</title>
         <author>
@@ -244,7 +287,7 @@ xargs -n3 -t -d&#39;\n&#39; sh -c &#39;ffmpeg -y -ss $0 -i &quot;The New Youtube
 <ul>
 <li><code>-ss</code> and <code>-t</code> has been already explain as start time and duration,</li>
 <li><code>-codec:a copy</code> indicate that we keep everything same as the original file in terms of codec, so no re-encoding for the output file, which means it’s going fast </li>
-<li><code>-y</code> to avoid prompt and force override of existing output file </li>
+<li><code>-y</code> to avoid prompt and force override of existing output file</li>
 </ul>
 <p>That works quite well. It might be possible to fully one line it, but let’s put a proper script to ease the usage of this.</p>
 <pre><code class="language-bash">#!/bin/sh
@@ -500,7 +543,7 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/38/RFC.jpg" alt="" />
-                     Gexf : https://raw.githubusercontent.com/totetmatt/gexf/master/rfc/rfc.gexf 
+                    Gexf : https://raw.githubusercontent.com/totetmatt/gexf/master/rfc/rfc.gexf
                 ]]>
             </summary>
         <content type="html">
@@ -627,144 +670,6 @@ With the release of Gephi 0.9 approaching, and the various change it will bring,
 
 
 
-
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>Let&#x27;s Play Gephi : Dbpedia, RDF, Sparql and your favorite Actors</title>
-        <author>
-            <name>Totetmatt</name>
-        </author>
-        <link href="https://totetmatt.github.io/lets-play-gephi-dbpedia-rdf-sparql-and-your-favorite-actors.html"/>
-        <id>https://totetmatt.github.io/lets-play-gephi-dbpedia-rdf-sparql-and-your-favorite-actors.html</id>
-            <category term="SPARQL"/>
-            <category term="Rdf"/>
-            <category term="Gephi"/>
-            <category term="Dbpedia"/>
-
-        <updated>2020-06-20T00:35:15+02:00</updated>
-            <summary>
-                <![CDATA[
-                        <img src="https://totetmatt.github.io/media/posts/34/1386271588578.jpg" alt="" />
-                    Introduction to concepts RDF stands for Resource Description Framework . It's a way to represent information of all kinds. It's now a W3C specification and&hellip;
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                    <img src="https://totetmatt.github.io/media/posts/34/1386271588578.jpg" alt="" />
-                <h2>Introduction to concepts</h2>
-<p>RDF stands for <a href="https://en.wikipedia.org/wiki/Resource_Description_Framework">Resource Description Framework</a> . It's a way to represent information of all kinds. It's now a W3C specification and since 1995 people are working on RDF and all sub subjects related to information representation for automatic system. It can be concidered as the "Grand Father" of graph storage.</p>
-<p>The idea is very simple, all informations can be represented by a triplet :</p>
-<p style="text-align: center;">(subject, predicate, object)</p>
-<p>Storing data in a fancy way is nice, but the goal is to retrive data after. This is where <a href="https://en.wikipedia.org/wiki/SPARQL">SPARQL </a>enters. It's basically a SQL-like way to query your dataset made of RDF triplets.</p>
-<p><a href="http://wiki.dbpedia.org/">DBpedia </a>is the RDF wikipedia. It's an open datastore that tries to gather and offers in RDF format, all information that you can find in wikipedia or other knowledge service. It very interesting because it preformats concepts and makes it avaiaible for automatic processes or complex query across concepts.</p>
-<p>I'll not go deeper into the wide subject of how to do RDF and SPARQL. I'll go now step by step to explain briefely what we are doing, and that you can resue it, but if you are interested about RDF in general, look in google or buy books.</p>
-<h2>Dataset</h2>
-<p>There is a lot of possibilities of thema for this subject. This let's play, we will look about relationship of people around movies. It's not very original (but more than FB social network) but everybody will understand and the methodology can be applied in almost everything else.</p>
-<p style="text-align: center;"><em><strong>/!\ Unfortunately, Dbpedia.org  has frequent issues with its website, which means frequent Time Out or "Maintenance Time". That's life, usualy takes 5 min to come back. Use it to take a break /!\</strong></em></p>
-<h2>Let's Query</h2>
-<h3>Basics</h3>
-<p>RDF / SPARQL is like any database in the world, it's just a data store where you can query data. The main idea is to describe a pattern that the RDF engine will try to fetch on the element on the datastore.</p>
-<p>Let's say I want to have the information about <a href="https://en.wikipedia.org/wiki/Leonardo_DiCaprio">Leonardo DiCaprio</a> . His id in dbpedia is <a href="http://dbpedia.org/page/Leonardo_DiCaprio">dbpedia.org/resource/Leonardo_DiCaprio </a>.</p>
-<blockquote><p>To find the id of an entity, generally look for the entity page in wikipedia english and try <strong>http://dbpedia/resource/{wikipedia_Page_Id}</strong> . It works for most of the case. Note that if you put the id in the browser, it's actually a "representation" of the id (notice that url changed to http://dbpedia/<strong>page</strong>/) . The page show us actually all entities associated to the current resource.</p></blockquote>
-<p>Let's start with a simple query, go to <a href="http://dbpedia.org/sparql">http://dbpedia.org/sparql </a>and query :</p>
-<pre>select * 
-where 
-{
-  &lt;http://dbpedia.org/resource/Leonardo_DiCaprio&gt; ?predicate ?object.
-}</pre>
-<figure class="alignnone wp-image-457 size-full"><a href="https://totetmatt.github.io/media/posts/34/simpleQuery.gif" target="_blank"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/simpleQuery.gif" alt="simpleQuery" width="1348" height="608" /></figure></a></p>
-<p>You shoud be able to return all (predicate, object) associated to Leonardo.</p>
-<p>If we want particular information, like <strong>birthPlace</strong>, we just have to specify the the correct <strong>predicate</strong> :</p>
-<pre>select * 
-where 
-{
-  &lt;http://dbpedia.org/resource/Leonardo_DiCaprio&gt; &lt;http://dbpedia.org/property/birthPlace&gt; ?birthPlace.
-}</pre>
-<p>And if we want actually all relations where Leonardo DiCaprio is the <strong>object</strong>, we just have to modify the first query like this:</p>
-<pre>select * 
-where 
-{
-  ?subject ?predicate &lt;http://dbpedia.org/resource/Leonardo_DiCaprio&gt;.
-}</pre>
-<h3>More relations</h3>
-<p>Let's go more advanced. We want the movies where DiCaprio is invovled:</p>
-<pre>select distinct *
-where 
-{
- ?movie a &lt;http://dbpedia.org/ontology/Film&gt;.
- ?movie ?link &lt;http://dbpedia.org/resource/Leonardo_DiCaprio&gt;.
-}</pre>
-<p>Let's go step by step:</p>
-<ul>
-<li><strong>?movie a &lt;http://dbpedia.org/ontology/Film&gt;</strong> : Get all subject which is a &lt;http://dbpedia.org/ontology/Film&gt;. The 'a' is actally a SPARQL special word for &lt;rdf:type&gt;. So it's exactly equal to <strong>?movie &lt;rdf:type&gt; &lt;http://dbpedia.org/ontology/Film&gt;</strong></li>
-<li><strong>?movie ?link &lt;http://dbpedia.org/resource/Leonadro_DiCaprio&gt;</strong>: In the result, ?movie must also have a ?link to Leonardo.</li>
-</ul>
-<p>So the result is not only Movies where Leonardo DiCaprio played, but all movies where he has an involvement (actor, narrator, producer etc...) .</p>
-<figure class="alignnone size-medium wp-image-458"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/07/1386271588578.jpg"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/1386271588578-300x170.jpg" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/1386271588578-300x170-xs.jpg 300w ,https://totetmatt.github.io/media/posts/34/responsive/1386271588578-300x170-sm.jpg 480w ,https://totetmatt.github.io/media/posts/34/responsive/1386271588578-300x170-md.jpg 768w ,https://totetmatt.github.io/media/posts/34/responsive/1386271588578-300x170-lg.jpg 1024w ,https://totetmatt.github.io/media/posts/34/responsive/1386271588578-300x170-xl.jpg 1360w ,https://totetmatt.github.io/media/posts/34/responsive/1386271588578-300x170-2xl.jpg 1600w"  alt="1386271588578" width="300" height="170" /></figure></a></p>
-<p>We can go deeper :</p>
-<pre>select distinct ?movie,?actor
-where 
-{
- ?movie a &lt;http://dbpedia.org/ontology/Film&gt;.
- ?movie ?rel1 &lt;http://dbpedia.org/resource/Leonardo_DiCaprio&gt;.
- ?movie ?rel2 ?actor.
- ?actor a &lt;http://dbpedia.org/ontology/Person&gt;.
-}</pre>
-<p>There it is ! We have a list of all movies where Leonardo DiCaprio was invovled and all people that were also invovled in theses movies.</p>
-<p>Quick explanation on the last 2 lines:</p>
-<ul>
-<li><strong>?movie ?rel2 ?person.</strong> : Find all relation where ?movie is subject and ?actor is object.</li>
-<li><strong>?person a &lt;http://dbpedia.org/ontology/Person&gt;</strong> :  Variable ?person must be a &lt;rdf:type&gt;  &lt;http://dbpedia.org/ontology/Person&gt;. It basically exclude all related entities related to ?movie that are not relevent here like Cities, Award etc...</li>
-</ul>
-<p>That's it for querying data. I really briefely introduced RDF and SPARQL and I invite you to look closer on it if you are interested.</p>
-<h2>Let's Graph</h2>
-<p>What we want to see now is the garph resulting the last query we've performed about Leonardo.</p>
-<p>You always can write a script that use SPARQL api from dbpedia to convert the result into a CSV file. But Gephi has a plugin that can  integrate directly SPARQL query into graph.</p>
-<p>First, we need to install <a href="https://marketplace.gephi.org/plugin/semanticwebimport/">Semantic web import</a>. You can find and install this plugins in the <strong>Tools -&gt; Plugins</strong> part of you gephi.</p>
-<p>When installed, go to the <em>Semantic Web Import tab</em>.</p>
-<p>In <em>Drivers tab</em>, put <strong>http://dbpedia.org/sparql (AND PRESS !&gt;ENTER&lt;!).</strong></p>
-<p>Go to Query tab, remove the dummy query and put this one:</p>
-<pre>CONSTRUCT{
-  ?person &lt;http://gephi.org/type&gt; "person".
-  ?movie &lt;http://gephi.org/type&gt; "movie".
-  ?movie &lt;http://toto/link&gt; ?person .
-}
-WHERE
-{
- ?movie a &lt;http://dbpedia.org/ontology/Film&gt;.
- ?movie ?rel1 &lt;http://dbpedia.org/resource/Leonardo_DiCaprio&gt;.
- ?movie ?rel2 ?person.
- ?person a &lt;http://dbpedia.org/ontology/Person&gt;.
-}</pre>
-<p>Go back to the Graph preview and you should see nodes.</p>
-<figure class="alignnone size-full wp-image-465"><a href="https://totetmatt.github.io/media/posts/34/SPARQLGephi.gif"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/SPARQLGephi.gif" alt="SPARQLGephi" width="1348" height="661" /></figure></a></p>
-<p>How does it works ?</p>
-<p>You might have noticed that there is a strange block <strong>CONSTRUCT</strong> . That's actually a feature of SPARQL allowing you to create a new graph from a query. And that's where the magic works, the plugin execute the query, get a graph in return, and draw it in gephi.</p>
-<p>What is the syntax for this <strong>CONSTRUCT</strong> block :</p>
-<ul>
-<li><strong>?a &lt;http://gephi.org/{nodeProperty}&gt; ?b</strong> : Will create the node ?a with the property nodeProperty equals to ?b.</li>
-<li><strong>?a (&lt;what_You_Want&gt; or ?c) ?b</strong> : will create a link between ?a and ?b with label &lt;what_You_Want&gt;</li>
-</ul>
-<p>The result in our case is actually a bi-modal graph with Movies and Persons. I advise you to read the <a href="http://matthieu-totet.fr/Koumin/2015/07/11/understand-multipartite-graph/">Let's play about multimodal graph</a> if you want advanced analysis of this kind of network.</p>
-<p>What is interesting with this method is the way to query the data, and the fact that it's easily extendable to other subjects just by changing few things in the query. We can think about Music Band and Player relationship, the traditionnal Persons to Companies, or more original, all the common places where your favorites movies where shot, etc.. The limit is your imagination to graph.</p>
-<p>On our example, you can run multiple time the same query and changing which person you want to "expand", it will automatically create the global network of all your research and maybe give you some insight which new movies to watch tonight ;-)</p>
-<p>But keep in mind that you are heavily dependent on Dbpedia data quality (or other RDF entrypoint), which can alterate a lot you research.</p>
-<p>To finish, I let you with some random network from randomly selected people.</p>
-<h4>Leonardo DiCaprio (Actor)</h4>
-
-<figure class="size-thumbnail wp-image-470"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Dicaprio_All.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Dicaprio_All-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_All-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_All-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_All-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_All-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_All-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_All-150x150-2xl.png 1600w"  alt="People + Movies" width="150" height="150" /></figure></a> People + Movies</p>
-<figure class="size-thumbnail wp-image-471"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Dicaprio_Movies.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Dicaprio_Movies-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Movies-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Movies-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Movies-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Movies-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Movies-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Movies-150x150-2xl.png 1600w"  alt="Movies" width="150" height="150" /></figure></a> Movies</p>
-<figure class="size-thumbnail wp-image-472"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Dicaprio_Person.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Dicaprio_Person-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Person-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Person-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Person-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Person-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Person-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Dicaprio_Person-150x150-2xl.png 1600w"  alt="People" width="150" height="150" /></figure></a> People</p>
-<h4>Werner Herzog (Director)</h4>
-<figure class="wp-image-476 size-thumbnail"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Werner-Herzog_All.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Werner-Herzog_All-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_All-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_All-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_All-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_All-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_All-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_All-150x150-2xl.png 1600w"  alt="Werner Herzog_All" width="150" height="150" /></figure></a> People + Movies</p>
-<figure class="wp-image-477 size-thumbnail"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Werner-Herzog_Movies.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Werner-Herzog_Movies-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Movies-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Movies-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Movies-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Movies-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Movies-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Movies-150x150-2xl.png 1600w"  alt="Werner Herzog_Movies" width="150" height="150" /></figure></a> Movies</p>
-<figure class="wp-image-478 size-thumbnail"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Werner-Herzog_Person.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Werner-Herzog_Person-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Person-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Person-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Person-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Person-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Person-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Werner-Herzog_Person-150x150-2xl.png 1600w"  alt="Werner Herzog_Person" width="150" height="150" /></figure></a> People</p>
-<h4>Eric Serra (Music Composer)</h4>
-<figure class="wp-image-473 size-thumbnail"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Éric_Serra_All.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Éric_Serra_All-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_All-150x150-2xl.png 1600w"  alt="Éric_Serra_All" width="150" height="150" /></figure></a> People + Movies</p>
-<figure class="wp-image-474 size-thumbnail"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Éric_Serra_Movies.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Éric_Serra_Movies-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Movies-150x150-2xl.png 1600w"  alt="Éric_Serra_Movies" width="150" height="150" /></figure></a> Movies</p>
-<figure class="wp-image-475 size-thumbnail"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2015/08/Éric_Serra_Person.png"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/34/Éric_Serra_Person-150x150.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-xs.png 300w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-sm.png 480w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-md.png 768w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-lg.png 1024w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-xl.png 1360w ,https://totetmatt.github.io/media/posts/34/responsive/Éric_Serra_Person-150x150-2xl.png 1600w"  alt="Éric_Serra_Person" width="150" height="150" /></figure></a> People</p>
 
             ]]>
         </content>
