@@ -3,7 +3,7 @@
     <title>Toto do stuff</title>
     <link href="https://totetmatt.github.io/feed.xml" rel="self" />
     <link href="https://totetmatt.github.io" />
-    <updated>2022-06-24T17:55:28+02:00</updated>
+    <updated>2022-06-24T19:47:05+02:00</updated>
     <author>
         <name>Totetmatt</name>
     </author>
@@ -20,7 +20,7 @@
             <category term="graph"/>
             <category term="Real-time"/>
 
-        <updated>2022-06-24T17:55:28+02:00</updated>
+        <updated>2022-06-24T19:47:05+02:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/50/KodeLife-2022-05-29-at-20.57.32-0000_2.png" alt="" />
@@ -38,15 +38,16 @@
 <h2 id="bearer-token">Bearer Token</h2>
 <p>The old V1 and the new V2 API are slightly different, so you will need to reconfigure the credentials configuration inside the plugin. Instead of the Access API / Token set of credentials, you now only need the Bearer Token that you can generate and get on your Twitter application account.</p>
 <h2 id="query-rules">Query Rules</h2>
-<p>The “query” is now fully handled by Twitter. The .json file to save your query won’t be backported as there is a fundamentally different approach now to querying the stream on twitter api. Please read how to create rules on the official twitter documentation about filtered streams <a href="https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule">https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule</a> .
-This new way of building rules has multiple advantages,
-The rules are saved and bound to your application / Bearer Token, which means it will stay if you close Gephi and re-open it.
-You can add and remove rules without restarting the running stream
+<p>The “query” is now fully handled by Twitter. The .json file to save your query won’t be backported as there is a fundamentally different approach now to querying the stream on twitter api. Please read how to create rules on the official twitter documentation about filtered streams <a href="https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule">https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule</a> .</p>
+<p>This new way of building rules has multiple advantages,
+The rules are saved and bound to your application / Bearer Token, which means it will stay if you close Gephi and re-open it.</p>
+<p>You can add and remove rules without restarting the running stream.
 You can have multiple rules. These rules can be flagged with a ‘tag’.
-The plugin will use these rules tags to create new columns on the nodes so you can check what rules the entity is matching.
-Again, as this mechanism is purely controlled by twitter api, please read the official doc for more detailed information.</p>
+The plugin will use these rules tags to create new columns on the nodes so you can check what rules the entity is matching.</p>
+<p>Again, as this mechanism is purely controlled by twitter api, please read the official doc for more detailed information.</p>
 <h2 id="other-details">Other details</h2>
-<p>The api v2 has also changed how twitter retrieves the information. Moreover the plugin has to migrate from using Twitter4J library to official twitter-api-java-sdk (<a href="https://github.com/twitterdev/twitter-api-java-sdk">https://github.com/twitterdev/twitter-api-java-sdk</a> ) .These changes implied rewriting the networklogic to support the new way data is getting gathered.  Fortunately it was not that hard to do the rewriting and was also a chance to review some of the logic to fix some bugs. The networklogic should react mostly the same way as on the old version.</p>
+<p>The api v2 has also changed how twitter retrieves the information. Moreover the plugin has to migrate from using Twitter4J library to official twitter-api-java-sdk (<a href="https://github.com/twitterdev/twitter-api-java-sdk">https://github.com/twitterdev/twitter-api-java-sdk</a> ) .</p>
+<p>These changes implied rewriting the networklogic to support the new way data is getting gathered.  Fortunately it was not that hard to do the rewriting and was also a chance to review some of the logic to fix some bugs. The networklogic should react mostly the same way as on the old version.</p>
 <p>During the rewriting, some minor optimisation has been done, notably the issue that the creation of the entities shouldn’t be now too much behind when using Force Atlas.</p>
 
             ]]>
