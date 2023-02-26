@@ -3,7 +3,7 @@
     <title>Toto do stuff</title>
     <link href="https://totetmatt.github.io/feed.xml" rel="self" />
     <link href="https://totetmatt.github.io" />
-    <updated>2023-02-26T13:53:02+01:00</updated>
+    <updated>2023-02-26T14:36:52+01:00</updated>
     <author>
         <name>Totetmatt</name>
     </author>
@@ -22,19 +22,19 @@
             <category term="gmic"/>
             <category term="Gephi"/>
 
-        <updated>2023-02-26T13:53:02+01:00</updated>
+        <updated>2023-02-26T14:36:52+01:00</updated>
             <summary>
                 <![CDATA[
                         <img src="https://totetmatt.github.io/media/posts/51/output-2.png" alt="" />
-                    Mathieu Jacomy is currently experimenting a type ofr graph rendering using a technics called “Hillshading”, a demo is acessible here https://observablehq.com/d/7d19c2d05caf9fb2 . The idea is&hellip;
+                    Mathieu Jacomy is currently experimenting a type of graph rendering using a technic called “Hillshading”, a demo is accessible here https://observablehq.com/d/7d19c2d05caf9fb2 . The idea of&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
                     <img src="https://totetmatt.github.io/media/posts/51/output-2.png" alt="" />
-                <p>Mathieu Jacomy is currently experimenting a type ofr graph rendering using a technics called “Hillshading”, a demo is acessible here <a href="https://observablehq.com/d/7d19c2d05caf9fb2">https://observablehq.com/d/7d19c2d05caf9fb2</a> .
-The idea is to apply this concept is to add information to enhance the readability of the graph, especially when there is condenced clusters of nodes.</p>
-<p>The current script is working mostly in javascript with D3.js. I wanted to find a wyat odo it without any JS, locally in my computer. Then I remember a wonderful tool called <a href="https://gmic.eu/">GMIC</a> that can do a lot of advanced image processing and has a sort of scripting interface.</p>
+                <p>Mathieu Jacomy is currently experimenting a type of graph rendering using a technic called “Hillshading”, a demo is accessible here <a href="https://observablehq.com/d/7d19c2d05caf9fb2">https://observablehq.com/d/7d19c2d05caf9fb2</a> .
+The idea of this concept is to add information to enhance the readability of the graph, especially when there is condensed clusters of nodes.</p>
+<p>The current script is working mostly in javascript with D3.js. I wanted to find a way to do it without any JS, locally in my computer. Then I remember a wonderful tool called <a href="https://gmic.eu/">GMIC</a> that can do a lot of advanced image processing.</p>
 <p>To simplify the things, we are going to remove the shading part of the hillshading, which on my opinion isn’t the critical part of the entire process described by Mathieu Jacomy.
 At the end, hillshading are just shaded <a href="https://en.wikipedia.org/wiki/Contour_line#Isopleths">Isopleths</a> , the line you see in a map that indicate the altitude. I should be enough for the scope of the script we want to acheive.</p>
 <p>To use the script we need to have 2 applications :</p>
@@ -58,10 +58,10 @@ At the end, hillshading are just shaded <a href="https://en.wikipedia.org/wiki/C
 <p>Quick explanation : </p>
 <ul>
 <li><strong>fx_stamp</strong>: Convert the image to black and white and reverse it.</li>
-<li><strong>fx_channel_processing</strong>: apply a blur</li>
-<li><strong>samj_Colored_Outlines</strong>: create the isopleths</li>
-<li><strong>fx_channel_processing</strong>: convert to black and white image</li>
-<li><strong>output</strong>: save the image to <code>intermediate.png</code></li>
+<li><strong>fx_channel_processing</strong>: Apply a blur, this somehow simulate a Kernel Density Estimation. To simplify, the blur processing tries to genreate a density approximation on every point of the map.</li>
+<li><strong>samj_Colored_Outlines</strong>: Create the isopleths. We could vugalirse saying it’s a quantization of the discrete density aproximation computed on the previous step.</li>
+<li><strong>fx_channel_processing</strong>: Convert to black and white image</li>
+<li><strong>output</strong>: Save the image to <code>intermediate.png</code></li>
 </ul>
 <p><figure class="post__image"><img loading="lazy" src="https://totetmatt.github.io/media/posts/51/intermediate-3.png" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/51/responsive/intermediate-3-xs.png 300w ,https://totetmatt.github.io/media/posts/51/responsive/intermediate-3-sm.png 480w ,https://totetmatt.github.io/media/posts/51/responsive/intermediate-3-md.png 768w ,https://totetmatt.github.io/media/posts/51/responsive/intermediate-3-lg.png 1024w ,https://totetmatt.github.io/media/posts/51/responsive/intermediate-3-xl.png 1360w ,https://totetmatt.github.io/media/posts/51/responsive/intermediate-3-2xl.png 1600w"  alt="Image description" width="4096" height="4096" /></figure> Intermediate</p>
 <p>Then run this script :</p>
