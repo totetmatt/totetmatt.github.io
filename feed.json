@@ -10,6 +10,20 @@
     },
     "items": [
         {
+            "id": "https://totetmatt.github.io/twitter-streaming-importer-and-the-new-twitter.html",
+            "url": "https://totetmatt.github.io/twitter-streaming-importer-and-the-new-twitter.html",
+            "title": "Twitter Streaming importer and the New Twitter",
+            "summary": "Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay&hellip;",
+            "content_html": "<p>Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay like that until there is a positive change on the API and the platform in general.</p>\n<ul>\n<li>No more development, update, maintenance, support.</li>\n<li>Code itself to transform tweet to graph is not restricted. The API access is fully on the responsability of the Twitter company, and I can’t do things about it. Check with them.</li>\n<li>Plugin still available and should works if you have a working API Access.</li>\n<li>Code is open source and you are free to adapt it on new acquisition method.</li>\n</ul>\n",
+            "author": {
+                "name": "Totetmatt"
+            },
+            "tags": [
+            ],
+            "date_published": "2023-04-27T19:59:36+02:00",
+            "date_modified": "2023-04-27T19:59:36+02:00"
+        },
+        {
             "id": "https://totetmatt.github.io/network-graph-rendering-isopleths-with-gmic.html",
             "url": "https://totetmatt.github.io/network-graph-rendering-isopleths-with-gmic.html",
             "title": "Network Graph rendering : Isopleths with Gmic",
@@ -154,23 +168,6 @@
                    "Gephi"
             ],
             "date_published": "2016-04-25T20:33:47+02:00",
-            "date_modified": "2020-06-20T00:35:15+02:00"
-        },
-        {
-            "id": "https://totetmatt.github.io/request-for-comments-reference-map.html",
-            "url": "https://totetmatt.github.io/request-for-comments-reference-map.html",
-            "title": "Request for Comments Reference Map",
-            "summary": "Gexf : https://raw.githubusercontent.com/totetmatt/gexf/master/rfc/rfc.gexf",
-            "content_html": "<figure class=\"alignnone wp-image-545 size-medium\"><a href=\"http://matthieu-totet.fr/Koumin/wp-content/uploads/2016/01/RFC.jpg\"><img loading=\"lazy\"  src=\"https://totetmatt.github.io/media/posts/38/RFC-300x300.jpg\" sizes=\"(max-width: 48em) 100vw, 768px\" srcset=\"https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-xs.jpg 300w ,https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-sm.jpg 480w ,https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-md.jpg 768w ,https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-lg.jpg 1024w ,https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-xl.jpg 1360w ,https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-2xl.jpg 1600w\"  alt=\"RFC\" width=\"300\" height=\"300\" /></figure></a></p>\n<p>Gexf : <a href=\"https://raw.githubusercontent.com/totetmatt/gexf/master/rfc/rfc.gexf\">https://raw.githubusercontent.com/totetmatt/gexf/master/rfc/rfc.gexf</a></p>\n",
-            "image": "https://totetmatt.github.io/media/posts/38/RFC.jpg",
-            "author": {
-                "name": "Totetmatt"
-            },
-            "tags": [
-                   "Rfc",
-                   "Gephi"
-            ],
-            "date_published": "2016-02-01T08:53:31+01:00",
             "date_modified": "2020-06-20T00:35:15+02:00"
         }
     ]

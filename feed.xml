@@ -3,12 +3,39 @@
     <title>Toto do stuff</title>
     <link href="https://totetmatt.github.io/feed.xml" rel="self" />
     <link href="https://totetmatt.github.io" />
-    <updated>2023-02-26T14:36:52+01:00</updated>
+    <updated>2023-04-27T19:59:36+02:00</updated>
     <author>
         <name>Totetmatt</name>
     </author>
     <id>https://totetmatt.github.io</id>
 
+    <entry>
+        <title>Twitter Streaming importer and the New Twitter</title>
+        <author>
+            <name>Totetmatt</name>
+        </author>
+        <link href="https://totetmatt.github.io/twitter-streaming-importer-and-the-new-twitter.html"/>
+        <id>https://totetmatt.github.io/twitter-streaming-importer-and-the-new-twitter.html</id>
+
+        <updated>2023-04-27T19:59:36+02:00</updated>
+            <summary>
+                <![CDATA[
+                    Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay like that until there is a positive change on the API and the platform in general.</p>
+<ul>
+<li>No more development, update, maintenance, support.</li>
+<li>Code itself to transform tweet to graph is not restricted. The API access is fully on the responsability of the Twitter company, and I can’t do things about it. Check with them.</li>
+<li>Plugin still available and should works if you have a working API Access.</li>
+<li>Code is open source and you are free to adapt it on new acquisition method.</li>
+</ul>
+
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>Network Graph rendering : Isopleths with Gmic</title>
         <author>
@@ -599,32 +626,6 @@ plot_model(model,show_shapes=False, to_file='model.dot')</pre>
 </ul>
 <h2>It's not the end for Naoyun</h2>
 <p>Naoyun won't die and will keep some specificities that could not be transfered to the Gephi Plugin. But for the moment, the developpement is slowed down due to some dependencies issues and permanent refactoring.</p>
-
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>Request for Comments Reference Map</title>
-        <author>
-            <name>Totetmatt</name>
-        </author>
-        <link href="https://totetmatt.github.io/request-for-comments-reference-map.html"/>
-        <id>https://totetmatt.github.io/request-for-comments-reference-map.html</id>
-            <category term="Rfc"/>
-            <category term="Gephi"/>
-
-        <updated>2020-06-20T00:35:15+02:00</updated>
-            <summary>
-                <![CDATA[
-                        <img src="https://totetmatt.github.io/media/posts/38/RFC.jpg" alt="" />
-                    Gexf : https://raw.githubusercontent.com/totetmatt/gexf/master/rfc/rfc.gexf
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                    <img src="https://totetmatt.github.io/media/posts/38/RFC.jpg" alt="" />
-                <figure class="alignnone wp-image-545 size-medium"><a href="http://matthieu-totet.fr/Koumin/wp-content/uploads/2016/01/RFC.jpg"><img loading="lazy"  src="https://totetmatt.github.io/media/posts/38/RFC-300x300.jpg" sizes="(max-width: 48em) 100vw, 768px" srcset="https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-xs.jpg 300w ,https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-sm.jpg 480w ,https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-md.jpg 768w ,https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-lg.jpg 1024w ,https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-xl.jpg 1360w ,https://totetmatt.github.io/media/posts/38/responsive/RFC-300x300-2xl.jpg 1600w"  alt="RFC" width="300" height="300" /></figure></a></p>
-<p>Gexf : <a href="https://raw.githubusercontent.com/totetmatt/gexf/master/rfc/rfc.gexf">https://raw.githubusercontent.com/totetmatt/gexf/master/rfc/rfc.gexf</a></p>
 
             ]]>
         </content>
