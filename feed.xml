@@ -3,7 +3,7 @@
     <title>Toto do stuff</title>
     <link href="https://totetmatt.github.io/feed.xml" rel="self" />
     <link href="https://totetmatt.github.io" />
-    <updated>2023-04-27T19:59:36+02:00</updated>
+    <updated>2023-07-08T13:39:45+02:00</updated>
     <author>
         <name>Totetmatt</name>
     </author>
@@ -17,7 +17,7 @@
         <link href="https://totetmatt.github.io/twitter-streaming-importer-and-the-new-twitter.html"/>
         <id>https://totetmatt.github.io/twitter-streaming-importer-and-the-new-twitter.html</id>
 
-        <updated>2023-04-27T19:59:36+02:00</updated>
+        <updated>2023-07-08T13:39:45+02:00</updated>
             <summary>
                 <![CDATA[
                     Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay&hellip;
@@ -31,6 +31,12 @@
 <li>Code itself to transform tweet to graph is not restricted. The API access is fully on the responsability of the Twitter company, and I can’t do things about it. Check with them.</li>
 <li>Plugin still available and should works if you have a working API Access.</li>
 <li>Code is open source and you are free to adapt it on new acquisition method.</li>
+</ul>
+<p>[Update from 08-07-2023]</p>
+<p>It’s getting worst so the strike still on. Few comments :</p>
+<ul>
+<li>Looks like the Access Policy has changed a lot. No guarantee that it still works on the plugin. Gephi and the Twitter Streaming Importer are <strong>completely independant and unrelated</strong> to Twitter company. Which mean even if you payed the access to the API, there is no guarantee from the Gephi team and the Twitter Streaming Importer team at all that the Plugin will work.</li>
+<li>Code still open source, you are <em>libre</em> to read it and adapt it as long as it respect the open source licence of the Twitter Streaming Importer.</li>
 </ul>
 
             ]]>

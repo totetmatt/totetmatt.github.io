@@ -14,14 +14,14 @@
             "url": "https://totetmatt.github.io/twitter-streaming-importer-and-the-new-twitter.html",
             "title": "Twitter Streaming importer and the New Twitter",
             "summary": "Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay&hellip;",
-            "content_html": "<p>Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay like that until there is a positive change on the API and the platform in general.</p>\n<ul>\n<li>No more development, update, maintenance, support.</li>\n<li>Code itself to transform tweet to graph is not restricted. The API access is fully on the responsability of the Twitter company, and I can’t do things about it. Check with them.</li>\n<li>Plugin still available and should works if you have a working API Access.</li>\n<li>Code is open source and you are free to adapt it on new acquisition method.</li>\n</ul>\n",
+            "content_html": "<p>Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay like that until there is a positive change on the API and the platform in general.</p>\n<ul>\n<li>No more development, update, maintenance, support.</li>\n<li>Code itself to transform tweet to graph is not restricted. The API access is fully on the responsability of the Twitter company, and I can’t do things about it. Check with them.</li>\n<li>Plugin still available and should works if you have a working API Access.</li>\n<li>Code is open source and you are free to adapt it on new acquisition method.</li>\n</ul>\n<p>[Update from 08-07-2023]</p>\n<p>It’s getting worst so the strike still on. Few comments :</p>\n<ul>\n<li>Looks like the Access Policy has changed a lot. No guarantee that it still works on the plugin. Gephi and the Twitter Streaming Importer are <strong>completely independant and unrelated</strong> to Twitter company. Which mean even if you payed the access to the API, there is no guarantee from the Gephi team and the Twitter Streaming Importer team at all that the Plugin will work.</li>\n<li>Code still open source, you are <em>libre</em> to read it and adapt it as long as it respect the open source licence of the Twitter Streaming Importer.</li>\n</ul>\n",
             "author": {
                 "name": "Totetmatt"
             },
             "tags": [
             ],
             "date_published": "2023-04-27T19:59:36+02:00",
-            "date_modified": "2023-04-27T19:59:36+02:00"
+            "date_modified": "2023-07-08T13:39:45+02:00"
         },
         {
             "id": "https://totetmatt.github.io/network-graph-rendering-isopleths-with-gmic.html",
