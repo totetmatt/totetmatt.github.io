@@ -1,0 +1,91 @@
+<!doctype html><html lang=en><head><title>Extract chapters from Youtube Media :: Toto do stuff</title>
+<meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content=" Update: Since a while, youtube-dl isn&rsquo;t as powerful as it is. Fortunatelly another fork exists : yt-dlp . Use this instead
+Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of the video done, as they already parse any timestamp available for a while now.
+Thanks to youtube-dl, we can download thena video and the metadata which now contains this chapter data.
+"><meta name=keywords content><meta name=robots content="noodp"><link rel=canonical href=https://blog.totetmatt.fr/posts/2020-06-26_extract-chapters-youtube-media/><link rel=stylesheet href=https://blog.totetmatt.fr/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/fonts.min.4881f0c525f3ce2a1864fb6e96676396cebe1e6fcef1933e8e1dde7041004fb5.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/main.min.fe8dc560fccb53a458b0db19ccb7b265764ac46b68596b7e099c6793054dd457.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/prism.min.9023bbc24533d09e97a51a0a42a5a7bfe4c591ae167c5551fb1d2191d11977c0.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/syntax.min.cc789ed9377260d7949ea4c18781fc58959a89287210fe4edbff44ebfc1511b6.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/terminal.min.4b367d85d0d0061435650561285afed36c46a7cf8dc6d7ed5642d98e589fa622.css><link rel=stylesheet href=https://blog.totetmatt.fr/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css><link rel="shortcut icon" href=https://blog.totetmatt.fr/favicon.png><link rel=apple-touch-icon href=https://blog.totetmatt.fr/apple-touch-icon.png><meta name=twitter:card content="summary"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="og:title" content="Extract chapters from Youtube Media"><meta property="og:description" content=" Update: Since a while, youtube-dl isn&rsquo;t as powerful as it is. Fortunatelly another fork exists : yt-dlp . Use this instead
+Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of the video done, as they already parse any timestamp available for a while now.
+Thanks to youtube-dl, we can download thena video and the metadata which now contains this chapter data.
+"><meta property="og:url" content="https://blog.totetmatt.fr/posts/2020-06-26_extract-chapters-youtube-media/"><meta property="og:site_name" content="Toto do stuff"><meta property="og:image" content="https://blog.totetmatt.fr/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="627"><meta property="article:published_time" content="2020-06-26 11:00:00 +0100 +0100"></head><body><div class="container center"><header class=header><div class=header__inner><div class=header__logo><a href=/><div class=logo>Toto do stuff</div></a></div><ul class="menu menu--mobile"><li class=menu__trigger>Menu&nbsp;▾</li><li><ul class=menu__dropdown><li><a href=https://bsky.app/profile/totetmatt.fr>Bluesky</a></li><li><a href=https://mastodon.social/deck>Mastodon</a></li><li><a href=https://photo.totetmatt.fr>Photo</a></li></ul></li></ul></div><nav class=navigation-menu><ul class="navigation-menu__inner menu--desktop"><li><a href=https://bsky.app/profile/totetmatt.fr>Bluesky</a></li><li><a href=https://mastodon.social/deck>Mastodon</a></li><li><a href=https://photo.totetmatt.fr>Photo</a></li></ul></nav></header><div class=content><article class=post><h1 class=post-title><a href=https://blog.totetmatt.fr/posts/2020-06-26_extract-chapters-youtube-media/>Extract chapters from Youtube Media</a></h1><div class=post-meta><time class=post-date>2020-06-26</time></div><span class=post-tags>#<a href=https://blog.totetmatt.fr/tags/ffmpeg/>ffmpeg</a>&nbsp;
+#<a href=https://blog.totetmatt.fr/tags/bash/>bash</a>&nbsp;
+#<a href=https://blog.totetmatt.fr/tags/youtube-dl/>youtube-dl</a>&nbsp;
+#<a href=https://blog.totetmatt.fr/tags/ydl/>ydl</a>&nbsp;
+#<a href=https://blog.totetmatt.fr/tags/youtube/>youtube</a>&nbsp;</span><div class=post-content><div><blockquote><p>Update: Since a while, <code>youtube-dl</code> isn&rsquo;t as powerful as it is. Fortunatelly another fork exists : <code>yt-dlp</code> . Use this instead</p></blockquote><p>Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of the video done, as they already parse any timestamp available for a while now.</p><p>Thanks to <code>youtube-dl</code>, we can download thena video and the metadata which now contains this chapter data.</p><pre tabindex=0><code class=language-terminal data-lang=terminal>$ youtube-dl --write-info-json -x --audio-format mp3 https://www.youtube.com/watch?v=HZTStHzWRxM
+[youtube] HZTStHzWRxM: Downloading webpage
+[info] Writing video description metadata as JSON to: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.info.json
+[download] Destination: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm
+[download] 100% of 3.22MiB in 00:00
+[ffmpeg] Destination: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3
+Deleting original file The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm (pass -k to keep)
+</code></pre><p>We will use <a href="https://www.youtube.com/watch?v=HZTStHzWRxM">https://www.youtube.com/watch?v=HZTStHzWRxM</a> as example.</p><p>The command above will download the video file, transcode it to mp3 and also download the metadata in a json format. We have now 2 files :</p><ul><li><code>The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.info.json</code> that contains data</li><li><code>The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3</code> that is the media</li></ul><p><code>jq</code> is a wonderful command line to manipulate json on bash. We can for example get the title of the video like this :</p><pre tabindex=0><code class=language-terminal data-lang=terminal>$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json | jq -r .title  | sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39;
+
+The_New_Youtube_Chapter_Timestamp_Feature
+</code></pre><p>The sed here is to make sure we won’t have special characters that might lead to some error later.</p><p>The <code>-r</code> on <code>jq</code> indicate to return “raw text”. By default, <code>jq</code> will use some syntax colorization and keep some sepcial character that might leads to some issue.</p><p>If available, <code>Youtube-dl</code> info json contains a chapters array that contain all the chapters with their <code>start_time</code> , <code>end_time</code> and <code>title</code> .</p><pre tabindex=0><code class=language-terminal data-lang=terminal>$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json |\
+jq -r &#39;.chapters[]&#39;
+
+{
+  &#34;start_time&#34;: 0,
+  &#34;end_time&#34;: 17,
+  &#34;title&#34;: &#34;The new feature&#34;
+}
+{
+  &#34;start_time&#34;: 17,
+  &#34;end_time&#34;: 76,
+  &#34;title&#34;: &#34;Slow roll-out&#34;
+}
+{
+  &#34;start_time&#34;: 76,
+  &#34;end_time&#34;: 124,
+  &#34;title&#34;: &#34;How it works&#34;
+}
+{
+  &#34;start_time&#34;: 124,
+  &#34;end_time&#34;: 180,
+  &#34;title&#34;: &#34;Problems / suggestions for the future&#34;
+}
+</code></pre><p>The idea now is to use each dict entry here as parameters for ffmpeg to split the media according to the chapters data. As we are in bash, current json representation will be quite hard to use it like that, so we need to transform a little bit the representation here to use the output of <code>jq</code> in a pipe and in <code>xarg</code>s.</p><p>What also we need to take into consideration is that ffmpeg can split a media by giving the option <code>-ss</code> to know where to start and <code>-t</code> to know the duration of the cut, not the end time. As the information on the json gives us a start and end time, we need to perfom a simple substraction to have the start time and the duration.</p><pre tabindex=0><code class=language-terminal data-lang=terminal>$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json  |\
+jq -r &#39;.chapters[] | .start_time,.end_time-.start_time,.title &#39; |\
+sed &#39;s/&#34;//g&#39;
+
+0
+17
+The new feature
+17
+59
+Slow roll-out
+76
+48
+How it works
+124
+56
+Problems / suggestions for the future
+</code></pre><p>Thanks to <code>jq</code>, we can perfom simple math operation directly on the command to compute the duration. sed here again is only for cleaning up special characters.</p><p>Now, we can pipe the wonderful xargs to use the output as parameter and trigger a <code>ffmpeg</code> command</p><pre tabindex=0><code class=language-terminal data-lang=terminal>$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json|\
+jq -r &#39;.chapters[] | .start_time,.end_time-.start_time,.title &#39; |\
+sed -e &#39;s/[^A-Za-z0-9._-]/_/g&#39; |\
+xargs -n3 -t -d&#39;\n&#39; sh -c &#39;ffmpeg -y -ss $0 -i &#34;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&#34; -t $1 -codec:a copy &#34;$2.mp3&#34;&#39;
+</code></pre><ul><li><code>-n3</code> indicate to take parameters 3 by 3*</li><li><code>-t</code> is only to debug as it will print each command xargs will execute</li><li><code>-d'\n'</code> indicate that parameters are separated by <code>\n</code></li></ul><p>What is cool is that we could potentially parallelize the process here by adding to <code>xargs</code> the parameter <code>-P X</code> to run the multiple ffmpeg invokation in parallel.</p><p>On ffmpeg side, nothing tremendous :</p><ul><li><code>-ss</code> and <code>-t</code> has been already explain as start time and duration,</li><li><code>-codec:a</code> copy indicate that we keep everything same as the original file in terms of codec, so no re-encoding for the output file, which means it’s going fast</li><li><code>-y</code> to avoid prompt and force override of existing output file</li></ul><p>That works quite well. It might be possible to fully one line it, but let’s put a proper script to ease the usage of this.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e>#!/bin/sh
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>set -x
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#Download media + metadata</span>
+</span></span><span style=display:flex><span>youtube-dl --write-info-json -x --audio-format mp3 -o <span style=color:#e6db74>&#34;tmp_out.%(ext)s&#34;</span> $1
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Maybe a way to get the file name from previous function</span>
+</span></span><span style=display:flex><span>INFO<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;tmp_out.info.json&#34;</span>
+</span></span><span style=display:flex><span>AUDIO<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;tmp_out.mp3&#34;</span>
+</span></span><span style=display:flex><span>echo :: $INFO $AUDIO ::
+</span></span><span style=display:flex><span><span style=color:#75715e># Fetch the title</span>
+</span></span><span style=display:flex><span>TITLE<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>cat <span style=color:#e6db74>&#34;</span>$INFO<span style=color:#e6db74>&#34;</span> | jq -r .title | sed -e <span style=color:#e6db74>&#39;s/[^A-Za-z0-9._-]/_/g&#39;</span> <span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>                                                <span style=color:#75715e>#  ^--- Remove all weird character as we want to use it as filename</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># We will put all chapter into a directory</span>
+</span></span><span style=display:flex><span>mkdir <span style=color:#e6db74>&#34;</span>$TITLE<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Chapterization</span>
+</span></span><span style=display:flex><span>cat <span style=color:#e6db74>&#34;</span>$INFO<span style=color:#e6db74>&#34;</span> |<span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>jq -r <span style=color:#e6db74>&#39;.chapters[] | .start_time,.end_time-.start_time,.title &#39;</span> |<span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>sed -e <span style=color:#e6db74>&#39;s/[^A-Za-z0-9._-]/_/g&#39;</span> |<span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>xargs -n3 -t -d<span style=color:#e6db74>&#39;\n&#39;</span> sh -c <span style=color:#e6db74>&#34;ffmpeg -y -ss \$0 -i \&#34;</span>$AUDIO<span style=color:#e6db74>\&#34; -to \$1 -codec:a copy  -f mp3  \&#34;</span>$TITLE<span style=color:#e6db74>/\$2.mp3\&#34;&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#Remove tmp file</span>
+</span></span><span style=display:flex><span>rm tmp_out*
+</span></span></code></pre></div><p>The script file here : <a href=https://gist.github.com/totetmatt/b4bf50c62642e5a9e1bf6365a47e19c6>https://gist.github.com/totetmatt/b4bf50c62642e5a9e1bf6365a47e19c6</a></p><p>No big change on the global approach just something to becareful : Yes, there is a hell quote escape game to play and it might not be pleasant ….</p><p>To explain the last part, as far as I understand it, the string will be evaluated multiple time :</p><ul><li>First time will be at “script level”, so it will replace any $VARIABLE present in the script like <code>$AUDIO</code> and <code>$TITLE</code></li><li>Second time will be at <code>xargs</code> / <code>sh -c</code> invokation where then it’s possible to use <code>$0</code> <code>$1</code> and <code>$2</code>. But if we don’t escape it first, theses variables will be evaluated at the first round, that’s why we need to backslash it <code>\$0, \$1, \$2</code>.</li></ul><p>You can see the result of the string after the 1st evaluation thanks to the <code>-t</code> option of <code>xargs</code> :</p><pre tabindex=0><code class=language-terminal data-lang=terminal>sh -c &#39;ffmpeg -y -ss $0 -i &#34;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&#34; -to $1 -codec:a copy  -f mp3  &#34;The_New_Youtube_Chapter_Timestamp_Feature/$2.mp3&#34;&#39; 124 56 Problems___suggestions_for_the_future
+</code></pre><p>There might be other and better way to deal wih the args parsing, the string escape and the string cleanup, but current solution works enough :)</p></div></div><div class=pagination><div class=pagination__title><span class=pagination__title-h>Read other posts</span><hr></div><div class=pagination__buttons><a href=https://blog.totetmatt.fr/posts/2020-10-13_twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file/ class="button inline prev">Twitch and FFmpeg and Youtube-dl: Fetch from live stream to local file</a></div></div></article></div><footer class=footer><div class=footer__inner><div class=copyright><span>© 2025 Powered by <a href=https://gohugo.io>Hugo</a></span>
+<span>:: <a href=https://github.com/panr/hugo-theme-terminal target=_blank>Theme</a> made by <a href=https://github.com/panr target=_blank>panr</a></span></div></div></footer><script type=text/javascript src=/bundle.min.js></script></div></body></html>

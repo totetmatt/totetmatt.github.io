@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Youtube on Toto do stuff</title><link>https://blog.totetmatt.fr/tags/youtube/</link><description>Recent content in Youtube on Toto do stuff</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 26 Jun 2020 11:00:00 +0100</lastBuildDate><atom:link href="https://blog.totetmatt.fr/tags/youtube/index.xml" rel="self" type="application/rss+xml"/><item><title>Extract chapters from Youtube Media</title><link>https://blog.totetmatt.fr/posts/2020-06-26_extract-chapters-youtube-media/</link><pubDate>Fri, 26 Jun 2020 11:00:00 +0100</pubDate><guid>https://blog.totetmatt.fr/posts/2020-06-26_extract-chapters-youtube-media/</guid><description>&lt;blockquote>
+&lt;p>Update: Since a while, &lt;code>youtube-dl&lt;/code> isn&amp;rsquo;t as powerful as it is. Fortunatelly another fork exists : &lt;code>yt-dlp&lt;/code> . Use this instead&lt;/p>&lt;/blockquote>
+&lt;p>Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of the video done, as they already parse any timestamp available for a while now.&lt;/p>
+&lt;p>Thanks to &lt;code>youtube-dl&lt;/code>, we can download thena video and the metadata which now contains this chapter data.&lt;/p></description><content>&lt;blockquote>
+&lt;p>Update: Since a while, &lt;code>youtube-dl&lt;/code> isn&amp;rsquo;t as powerful as it is. Fortunatelly another fork exists : &lt;code>yt-dlp&lt;/code> . Use this instead&lt;/p>&lt;/blockquote>
+&lt;p>Youtube recently got this “chapter” concept where it fragment a long video with chapters. I think this data might be parsed from the description of the video done, as they already parse any timestamp available for a while now.&lt;/p>
+&lt;p>Thanks to &lt;code>youtube-dl&lt;/code>, we can download thena video and the metadata which now contains this chapter data.&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-terminal" data-lang="terminal">$ youtube-dl --write-info-json -x --audio-format mp3 https://www.youtube.com/watch?v=HZTStHzWRxM
+[youtube] HZTStHzWRxM: Downloading webpage
+[info] Writing video description metadata as JSON to: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.info.json
+[download] Destination: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm
+[download] 100% of 3.22MiB in 00:00
+[ffmpeg] Destination: The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3
+Deleting original file The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.webm (pass -k to keep)
+&lt;/code>&lt;/pre>&lt;p>We will use &lt;a href="https://www.youtube.com/watch?v=HZTStHzWRxM">https://www.youtube.com/watch?v=HZTStHzWRxM&lt;/a> as example.&lt;/p>
+&lt;p>The command above will download the video file, transcode it to mp3 and also download the metadata in a json format. We have now 2 files :&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.info.json&lt;/code> that contains data&lt;/li>
+&lt;li>&lt;code>The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&lt;/code> that is the media&lt;/li>
+&lt;/ul>
+&lt;p>&lt;code>jq&lt;/code> is a wonderful command line to manipulate json on bash. We can for example get the title of the video like this :&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-terminal" data-lang="terminal">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json | jq -r .title | sed -e &amp;#39;s/[^A-Za-z0-9._-]/_/g&amp;#39;
+The_New_Youtube_Chapter_Timestamp_Feature
+&lt;/code>&lt;/pre>&lt;p>The sed here is to make sure we won’t have special characters that might lead to some error later.&lt;/p>
+&lt;p>The &lt;code>-r&lt;/code> on &lt;code>jq&lt;/code> indicate to return “raw text”. By default, &lt;code>jq&lt;/code> will use some syntax colorization and keep some sepcial character that might leads to some issue.&lt;/p>
+&lt;p>If available, &lt;code>Youtube-dl&lt;/code> info json contains a chapters array that contain all the chapters with their &lt;code>start_time&lt;/code> , &lt;code>end_time&lt;/code> and &lt;code>title&lt;/code> .&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-terminal" data-lang="terminal">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json |\
+jq -r &amp;#39;.chapters[]&amp;#39;
+{
+&amp;#34;start_time&amp;#34;: 0,
+&amp;#34;end_time&amp;#34;: 17,
+&amp;#34;title&amp;#34;: &amp;#34;The new feature&amp;#34;
+}
+{
+&amp;#34;start_time&amp;#34;: 17,
+&amp;#34;end_time&amp;#34;: 76,
+&amp;#34;title&amp;#34;: &amp;#34;Slow roll-out&amp;#34;
+}
+{
+&amp;#34;start_time&amp;#34;: 76,
+&amp;#34;end_time&amp;#34;: 124,
+&amp;#34;title&amp;#34;: &amp;#34;How it works&amp;#34;
+}
+{
+&amp;#34;start_time&amp;#34;: 124,
+&amp;#34;end_time&amp;#34;: 180,
+&amp;#34;title&amp;#34;: &amp;#34;Problems / suggestions for the future&amp;#34;
+}
+&lt;/code>&lt;/pre>&lt;p>The idea now is to use each dict entry here as parameters for ffmpeg to split the media according to the chapters data. As we are in bash, current json representation will be quite hard to use it like that, so we need to transform a little bit the representation here to use the output of &lt;code>jq&lt;/code> in a pipe and in &lt;code>xarg&lt;/code>s.&lt;/p>
+&lt;p>What also we need to take into consideration is that ffmpeg can split a media by giving the option &lt;code>-ss&lt;/code> to know where to start and &lt;code>-t&lt;/code> to know the duration of the cut, not the end time. As the information on the json gives us a start and end time, we need to perfom a simple substraction to have the start time and the duration.&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-terminal" data-lang="terminal">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json |\
+jq -r &amp;#39;.chapters[] | .start_time,.end_time-.start_time,.title &amp;#39; |\
+sed &amp;#39;s/&amp;#34;//g&amp;#39;
+0
+17
+The new feature
+17
+59
+Slow roll-out
+76
+48
+How it works
+124
+56
+Problems / suggestions for the future
+&lt;/code>&lt;/pre>&lt;p>Thanks to &lt;code>jq&lt;/code>, we can perfom simple math operation directly on the command to compute the duration. sed here again is only for cleaning up special characters.&lt;/p>
+&lt;p>Now, we can pipe the wonderful xargs to use the output as parameter and trigger a &lt;code>ffmpeg&lt;/code> command&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-terminal" data-lang="terminal">$ cat The\ New\ Youtube\ Chapter\ Timestamp\ Feature-HZTStHzWRxM.info.json|\
+jq -r &amp;#39;.chapters[] | .start_time,.end_time-.start_time,.title &amp;#39; |\
+sed -e &amp;#39;s/[^A-Za-z0-9._-]/_/g&amp;#39; |\
+xargs -n3 -t -d&amp;#39;\n&amp;#39; sh -c &amp;#39;ffmpeg -y -ss $0 -i &amp;#34;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&amp;#34; -t $1 -codec:a copy &amp;#34;$2.mp3&amp;#34;&amp;#39;
+&lt;/code>&lt;/pre>&lt;ul>
+&lt;li>&lt;code>-n3&lt;/code> indicate to take parameters 3 by 3*&lt;/li>
+&lt;li>&lt;code>-t&lt;/code> is only to debug as it will print each command xargs will execute&lt;/li>
+&lt;li>&lt;code>-d'\n'&lt;/code> indicate that parameters are separated by &lt;code>\n&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>What is cool is that we could potentially parallelize the process here by adding to &lt;code>xargs&lt;/code> the parameter &lt;code>-P X&lt;/code> to run the multiple ffmpeg invokation in parallel.&lt;/p>
+&lt;p>On ffmpeg side, nothing tremendous :&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>-ss&lt;/code> and &lt;code>-t&lt;/code> has been already explain as start time and duration,&lt;/li>
+&lt;li>&lt;code>-codec:a&lt;/code> copy indicate that we keep everything same as the original file in terms of codec, so no re-encoding for the output file, which means it’s going fast&lt;/li>
+&lt;li>&lt;code>-y&lt;/code> to avoid prompt and force override of existing output file&lt;/li>
+&lt;/ul>
+&lt;p>That works quite well. It might be possible to fully one line it, but let’s put a proper script to ease the usage of this.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">#!/bin/sh
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span>set -x
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">#Download media + metadata&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>youtube-dl --write-info-json -x --audio-format mp3 -o &lt;span style="color:#e6db74">&amp;#34;tmp_out.%(ext)s&amp;#34;&lt;/span> $1
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Maybe a way to get the file name from previous function&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>INFO&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;tmp_out.info.json&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>AUDIO&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;tmp_out.mp3&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>echo :: $INFO $AUDIO ::
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Fetch the title&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>TITLE&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">$(&lt;/span>cat &lt;span style="color:#e6db74">&amp;#34;&lt;/span>$INFO&lt;span style="color:#e6db74">&amp;#34;&lt;/span> | jq -r .title | sed -e &lt;span style="color:#e6db74">&amp;#39;s/[^A-Za-z0-9._-]/_/g&amp;#39;&lt;/span> &lt;span style="color:#66d9ef">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e"># ^--- Remove all weird character as we want to use it as filename&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># We will put all chapter into a directory&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mkdir &lt;span style="color:#e6db74">&amp;#34;&lt;/span>$TITLE&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Chapterization&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cat &lt;span style="color:#e6db74">&amp;#34;&lt;/span>$INFO&lt;span style="color:#e6db74">&amp;#34;&lt;/span> |&lt;span style="color:#ae81ff">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">&lt;/span>jq -r &lt;span style="color:#e6db74">&amp;#39;.chapters[] | .start_time,.end_time-.start_time,.title &amp;#39;&lt;/span> |&lt;span style="color:#ae81ff">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">&lt;/span>sed -e &lt;span style="color:#e6db74">&amp;#39;s/[^A-Za-z0-9._-]/_/g&amp;#39;&lt;/span> |&lt;span style="color:#ae81ff">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">&lt;/span>xargs -n3 -t -d&lt;span style="color:#e6db74">&amp;#39;\n&amp;#39;&lt;/span> sh -c &lt;span style="color:#e6db74">&amp;#34;ffmpeg -y -ss \$0 -i \&amp;#34;&lt;/span>$AUDIO&lt;span style="color:#e6db74">\&amp;#34; -to \$1 -codec:a copy -f mp3 \&amp;#34;&lt;/span>$TITLE&lt;span style="color:#e6db74">/\$2.mp3\&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">#Remove tmp file&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rm tmp_out*
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The script file here : &lt;a href="https://gist.github.com/totetmatt/b4bf50c62642e5a9e1bf6365a47e19c6">https://gist.github.com/totetmatt/b4bf50c62642e5a9e1bf6365a47e19c6&lt;/a>&lt;/p>
+&lt;p>No big change on the global approach just something to becareful : Yes, there is a hell quote escape game to play and it might not be pleasant ….&lt;/p>
+&lt;p>To explain the last part, as far as I understand it, the string will be evaluated multiple time :&lt;/p>
+&lt;ul>
+&lt;li>First time will be at “script level”, so it will replace any $VARIABLE present in the script like &lt;code>$AUDIO&lt;/code> and &lt;code>$TITLE&lt;/code>&lt;/li>
+&lt;li>Second time will be at &lt;code>xargs&lt;/code> / &lt;code>sh -c&lt;/code> invokation where then it’s possible to use &lt;code>$0&lt;/code> &lt;code>$1&lt;/code> and &lt;code>$2&lt;/code>. But if we don’t escape it first, theses variables will be evaluated at the first round, that’s why we need to backslash it &lt;code>\$0, \$1, \$2&lt;/code>.&lt;/li>
+&lt;/ul>
+&lt;p>You can see the result of the string after the 1st evaluation thanks to the &lt;code>-t&lt;/code> option of &lt;code>xargs&lt;/code> :&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-terminal" data-lang="terminal">sh -c &amp;#39;ffmpeg -y -ss $0 -i &amp;#34;The New Youtube Chapter Timestamp Feature-HZTStHzWRxM.mp3&amp;#34; -to $1 -codec:a copy -f mp3 &amp;#34;The_New_Youtube_Chapter_Timestamp_Feature/$2.mp3&amp;#34;&amp;#39; 124 56 Problems___suggestions_for_the_future
+&lt;/code>&lt;/pre>&lt;p>There might be other and better way to deal wih the args parsing, the string escape and the string cleanup, but current solution works enough :)&lt;/p></content></item></channel></rss>

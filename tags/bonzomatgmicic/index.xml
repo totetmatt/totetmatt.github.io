@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bonzomatgmicic on Toto do stuff</title>
+    <link>http://localhost:1313/tags/bonzomatgmicic/</link>
+    <description>Recent content in Bonzomatgmicic on Toto do stuff</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 26 Feb 2023 00:00:00 +0100</lastBuildDate><atom:link href="http://localhost:1313/tags/bonzomatgmicic/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Network Graph rendering : Isopleths with Gmic</title>
+      <link>http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/article/</link>
+      <pubDate>Sun, 26 Feb 2023 00:00:00 +0100</pubDate>
+      
+      <guid>http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/article/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/cover.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Mathieu Jacomy is currently experimenting a type of graph rendering using a technic called &lt;strong&gt;“Hillshading”&lt;/strong&gt;, a demo is accessible here &lt;a href=&#34;https://observablehq.com/d/7d19c2d05caf9fb2&#34;&gt;https://observablehq.com/d/7d19c2d05caf9fb2&lt;/a&gt; . The idea of this concept is to add information to enhance the readability of the graph, especially when there is condensed clusters of nodes.&lt;/p&gt;
+&lt;p&gt;The current script is working mostly in javascript with &lt;strong&gt;D3.js&lt;/strong&gt;. I wanted to find a way to do it without any JS, locally in my computer. Then I remember a wonderful tool called GMIC that can do a lot of advanced image processing.&lt;/p&gt;</description>
+      <content>&lt;p&gt;&lt;img src=&#34;http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/cover.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Mathieu Jacomy is currently experimenting a type of graph rendering using a technic called &lt;strong&gt;“Hillshading”&lt;/strong&gt;, a demo is accessible here &lt;a href=&#34;https://observablehq.com/d/7d19c2d05caf9fb2&#34;&gt;https://observablehq.com/d/7d19c2d05caf9fb2&lt;/a&gt; . The idea of this concept is to add information to enhance the readability of the graph, especially when there is condensed clusters of nodes.&lt;/p&gt;
+&lt;p&gt;The current script is working mostly in javascript with &lt;strong&gt;D3.js&lt;/strong&gt;. I wanted to find a way to do it without any JS, locally in my computer. Then I remember a wonderful tool called GMIC that can do a lot of advanced image processing.&lt;/p&gt;
+&lt;p&gt;To simplify the things, we are going to remove the shading part of the hillshading, which on my opinion isn’t the critical part of the entire process described by Mathieu Jacomy. At the end, hillshading are just shaded &lt;strong&gt;Isopleths&lt;/strong&gt; , the line you see in a map that indicate the altitude. I should be enough for the scope of the script we want to acheive.&lt;/p&gt;
+&lt;p&gt;To use the script we need to have 2 applications :&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;GMIC&lt;/strong&gt;, we need the CLI version of the tool. It’s available for Windows and Linux.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gephi&lt;/strong&gt; , for generating graph.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;export-network-graph&#34;&gt;Export Network Graph&lt;/h2&gt;
+&lt;p&gt;Take any network graph you have, the final effect will wokr better on graph that has a lot of clusters.&lt;/p&gt;
+&lt;p&gt;When you’re happy with your spatialisation in preview, we need to export in PNG 2 files with the following configuration:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;background.png&lt;/strong&gt; where only the Nodes are rendered, use the Preview Settings to remove the node labels,the edges and the edge labels. Export this file with a certains option : 4096x4096, no transparant background, 0% margin&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;foreground.png&lt;/strong&gt; where you can render the node and the edges, (label might be rendered, but might occur small issue later, I will come back). Export this file with a certains option : 4096x4096, transparant background, 0% margin.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/background-md.png&#34; alt=&#34;&#34;&gt;
+&lt;img src=&#34;http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/foreground-md.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;processing-with-gmic&#34;&gt;Processing with Gmic&lt;/h2&gt;
+&lt;p&gt;Let’s concider you exported the png in the same directory, and gmic is accessible on your terminal, run this command :&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    gmic.exe background.png fx_stamp&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; 1,100,0,30,0,1,1,0,50,50 fx_channel_processing&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; 0,0,0,1.22,2,0,100,256,0,0,0,2,0,0,50,50 samj_Colored_Outlines&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; 0,0,16,0,2,0,0,0,255 fx_channel_processing&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; 0,0,100,0,0,0,100,256,0,1,0,2,0,0,50,50 output&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; intermediate.png
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Quick explanation :&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;fx_stamp&lt;/strong&gt;: Convert the image to black and white and reverse it.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;fx_channel_processing&lt;/strong&gt;: Apply a blur, this somehow simulate a Kernel Density Estimation. To simplify, the blur processing tries to genreate a density approximation on every point of the map.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;samj_Colored_Outlines&lt;/strong&gt;: Create the isopleths. We could vugalirse saying it’s a quantization of the discrete density aproximation computed on the previous step.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;fx_channel_processing&lt;/strong&gt;: Convert to black and white image&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;output&lt;/strong&gt;: Save the image to intermediate.png&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/intermediate-3-md.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Then run this script :&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gmic.exe intermediate.png foreground.png +channels&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; 100% +image&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;,0%,0%,0,0,1,&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;2&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;,255 output&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;-1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; output.png
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Here the script only compile the &lt;strong&gt;intermediate.png&lt;/strong&gt; and &lt;strong&gt;foreground.png&lt;/strong&gt; as one final image.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/cover.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;comments&#34;&gt;Comments&lt;/h2&gt;
+&lt;p&gt;The process is still experimental, a lot of things may vary like the export size that asks to do reparametrization of the script. There is also some limitation due to current behaviour of gephi. If the foreground exports with node label, it might generate a image not aligned with the background which break the global effect at the end.&lt;/p&gt;
+&lt;p&gt;Out of that, the effect works well with networkt that has a certain critical mass of node density. Having the edges on the foreground hides a little bit the iso lines.&lt;/p&gt;
+&lt;h2 id=&#34;some-other-experiments&#34;&gt;Some other experiments&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/world_border_final-md.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/rfc_final-2-md.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/miserable_final-md.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>

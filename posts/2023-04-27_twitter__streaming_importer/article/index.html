@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  
+    <title>Twitter Streaming importer and the New Twitter :: Toto do stuff</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay like that until there is a positive change on the API and the platform in general.
+No more development, update, maintenance, support. Code itself to transform tweet to graph is not restricted. The API access is fully on the responsability of the Twitter company, and I can’t do things about it. Check with them. Plugin still available and should works if you have a working API Access. Code is open source and you are free to adapt it on new acquisition method. [Update from 08-07-2023] It’s getting worst so the strike still on. Few comments :
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="http://localhost:1313/posts/2023-04-27_twitter__streaming_importer/article/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/fonts.min.4881f0c525f3ce2a1864fb6e96676396cebe1e6fcef1933e8e1dde7041004fb5.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/main.min.fe8dc560fccb53a458b0db19ccb7b265764ac46b68596b7e099c6793054dd457.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/prism.min.9023bbc24533d09e97a51a0a42a5a7bfe4c591ae167c5551fb1d2191d11977c0.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/syntax.min.cc789ed9377260d7949ea4c18781fc58959a89287210fe4edbff44ebfc1511b6.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/terminal.min.4b367d85d0d0061435650561285afed36c46a7cf8dc6d7ed5642d98e589fa622.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="http://localhost:1313/favicon.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Twitter Streaming importer and the New Twitter">
+<meta property="og:description" content="Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay like that until there is a positive change on the API and the platform in general.
+No more development, update, maintenance, support. Code itself to transform tweet to graph is not restricted. The API access is fully on the responsability of the Twitter company, and I can’t do things about it. Check with them. Plugin still available and should works if you have a working API Access. Code is open source and you are free to adapt it on new acquisition method. [Update from 08-07-2023] It’s getting worst so the strike still on. Few comments :
+" />
+<meta property="og:url" content="http://localhost:1313/posts/2023-04-27_twitter__streaming_importer/article/" />
+<meta property="og:site_name" content="Toto do stuff" />
+
+  <meta property="og:image" content="http://localhost:1313/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-04-27 00:00:00 &#43;0100 &#43;0100" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    Toto do stuff
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="https://bsky.app/profile/totetmatt.fr">Bluesky</a></li>
+        
+      
+        
+          <li><a href="https://mastodon.social/deck">Mastodon</a></li>
+        
+      
+        
+          <li><a href="https://photo.totetmatt.fr">Photo</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="https://bsky.app/profile/totetmatt.fr" >Bluesky</a></li>
+        
+      
+        
+          <li><a href="https://mastodon.social/deck" >Mastodon</a></li>
+        
+      
+        
+          <li><a href="https://photo.totetmatt.fr" >Photo</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="http://localhost:1313/posts/2023-04-27_twitter__streaming_importer/article/">Twitter Streaming importer and the New Twitter</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-04-27</time></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="http://localhost:1313/tags/twitter/">twitter</a>&nbsp;
+      
+      #<a href="http://localhost:1313/tags/gephi/">gephi</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>Due to the current situation on Twitter API, a FLOSS Developer strike will be observed for the Gephi’s Twitter Streaming Importer plugin. This will stay like that until there is a positive change on the API and the platform in general.</p>
+<ul>
+<li>No more development, update, maintenance, support.</li>
+<li>Code itself to transform tweet to graph is not restricted. The API access is fully on the responsability of the Twitter company, and I can’t do things about it. Check with them.</li>
+<li>Plugin still available and should works if you have a working API Access.</li>
+<li>Code is open source and you are free to adapt it on new acquisition method.</li>
+</ul>
+<h2 id="update-from-08-07-2023">[Update from 08-07-2023]<a href="#update-from-08-07-2023" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>It’s getting worst so the strike still on. Few comments :</p>
+<ul>
+<li>Looks like the Access Policy has changed a lot. No guarantee that it still works on the plugin. Gephi and the Twitter Streaming Importer are completely independant and unrelated to Twitter company. Which mean even if you payed the access to the API, there is no guarantee from the Gephi team and the Twitter Streaming Importer team at all that the Plugin will work.</li>
+<li>Code still open source, you are libre to read it and adapt it as long as it respect the open source licence of the Twitter Streaming Importer.</li>
+</ul>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+    
+    
+      <a href="http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/article/" class="button inline next">
+        Network Graph rendering : Isopleths with Gmic
+      </a>
+    
+  </div>
+</div>
+
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2025 Powered by <a href="https://gohugo.io">Hugo</a></span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

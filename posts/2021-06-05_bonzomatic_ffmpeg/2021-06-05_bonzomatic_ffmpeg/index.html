@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  
+    <title>How to Capture your Bonzomatic with FFmpeg :: Toto do stuff</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Got to work on this website https://psenough.github.io/shader_summary/ that try to gather all graphical live coding events performed in the past.
+Basically, for people that don’t know, it’s live coding performance done, sometime as a competition, sometime as a jam, where folks create real time graphics stuff.
+One of the common tool used is Bonzomatic , it’s a simple application that use OpenGL to render a rectangle that fit to the application screen and then you can live edit the Framgment Shader that determine what should be the color of the pixel.
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="http://localhost:1313/posts/2021-06-05_bonzomatic_ffmpeg/2021-06-05_bonzomatic_ffmpeg/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/fonts.min.4881f0c525f3ce2a1864fb6e96676396cebe1e6fcef1933e8e1dde7041004fb5.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/main.min.fe8dc560fccb53a458b0db19ccb7b265764ac46b68596b7e099c6793054dd457.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/prism.min.9023bbc24533d09e97a51a0a42a5a7bfe4c591ae167c5551fb1d2191d11977c0.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/syntax.min.cc789ed9377260d7949ea4c18781fc58959a89287210fe4edbff44ebfc1511b6.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/terminal.min.4b367d85d0d0061435650561285afed36c46a7cf8dc6d7ed5642d98e589fa622.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="http://localhost:1313/favicon.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="How to Capture your Bonzomatic with FFmpeg">
+<meta property="og:description" content="Got to work on this website https://psenough.github.io/shader_summary/ that try to gather all graphical live coding events performed in the past.
+Basically, for people that don’t know, it’s live coding performance done, sometime as a competition, sometime as a jam, where folks create real time graphics stuff.
+One of the common tool used is Bonzomatic , it’s a simple application that use OpenGL to render a rectangle that fit to the application screen and then you can live edit the Framgment Shader that determine what should be the color of the pixel.
+" />
+<meta property="og:url" content="http://localhost:1313/posts/2021-06-05_bonzomatic_ffmpeg/2021-06-05_bonzomatic_ffmpeg/" />
+<meta property="og:site_name" content="Toto do stuff" />
+
+  <meta property="og:image" content="http://localhost:1313/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2021-06-05 11:00:00 &#43;0100 &#43;0100" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    Toto do stuff
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="https://bsky.app/profile/totetmatt.fr">Bluesky</a></li>
+        
+      
+        
+          <li><a href="https://mastodon.social/deck">Mastodon</a></li>
+        
+      
+        
+          <li><a href="https://photo.totetmatt.fr">Photo</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="https://bsky.app/profile/totetmatt.fr" >Bluesky</a></li>
+        
+      
+        
+          <li><a href="https://mastodon.social/deck" >Mastodon</a></li>
+        
+      
+        
+          <li><a href="https://photo.totetmatt.fr" >Photo</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="http://localhost:1313/posts/2021-06-05_bonzomatic_ffmpeg/2021-06-05_bonzomatic_ffmpeg/">How to Capture your Bonzomatic with FFmpeg</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2021-06-05</time></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="http://localhost:1313/tags/ffmpeg/">ffmpeg</a>&nbsp;
+      
+      #<a href="http://localhost:1313/tags/bonzomatic/">bonzomatic</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>Got to work on this website <a href="https://psenough.github.io/shader_summary/">https://psenough.github.io/shader_summary/</a> that try to gather all graphical live coding events performed in the past.</p>
+<p>Basically, for people that don’t know, it’s live coding performance done, sometime as a competition, sometime as a jam, where folks create real time graphics stuff.</p>
+<p>One of the common tool used is Bonzomatic , it’s a simple application that use OpenGL to render a rectangle that fit to the application screen and then you can live edit the Framgment Shader that determine what should be the color of the pixel.</p>
+<p>Problem was we got a lot of entries but no preview images. Which is quite sad for a graphics discipline.</p>
+<p>After spending an afternoon coding into bonzomatic to find a way to export the bufferframe to an image (was almost here, I think I was missing some color format alignment) I thought about maybe a simpler solution using the best tool ever : FFmpeg.</p>
+<p>If we look at the website, there is a way (in Windows at least) to capture an application windows (<a href="https://trac.ffmpeg.org/wiki/Capture/Desktop">https://trac.ffmpeg.org/wiki/Capture/Desktop</a>) .</p>
+<p>So using this gdigrab format and using the window’s name, you can capture the input like this :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ffmpeg -f gdigrab -i <span style="color:#e6db74">&#39;title=BONZOMATIC - GLFW&#39;</span> -vframes <span style="color:#ae81ff">1</span> -q:v <span style="color:#ae81ff">2</span> -y snapshot.jpg
+</span></span></code></pre></div><p>Some notes :</p>
+<ul>
+<li>It will also capture the mouse if it’s inside, so be careful (maybe an option)</li>
+<li>If you don’t use fullscreen, it will capture only the “content” of the window, not the menu bar. Which mean that if you maximise, the output resolution will be the screen resolution minus the menu bar + other window frame.</li>
+<li>You might want to add a -s 1 before the input to let the application start and / or let ffmpeg get warm before starting a record</li>
+</ul>
+<p>Of course now you can also export as video. Here is an example of a ffmpeg command that render 10 seconds to mp4 :</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ffmpeg -ss <span style="color:#ae81ff">1</span> -t <span style="color:#ae81ff">10</span> -y -framerate <span style="color:#ae81ff">60</span> -f gdigrab -vsync <span style="color:#ae81ff">0</span> -hwaccel cuda -hwaccel_output_format cuda  -i <span style="color:#e6db74">&#39;title=BONZOMATIC - GLFW&#39;</span>  -c:a copy -c:v h264_nvenc -tune hq -b:v 20M -bufsize 20M -maxrate 50M -qmin <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">250</span> -bf <span style="color:#ae81ff">3</span> -b_ref_mode middle -temporal-aq <span style="color:#ae81ff">1</span> -rc-lookahead <span style="color:#ae81ff">20</span> -i_qfactor 0.75 -b_qfactor 1.1  out.mp4
+</span></span></code></pre></div><p><em>(I copy pasted some config + blind tweak. Can&rsquo;t really explain the options but was happy with result)</em></p>
+<p>I’m using nvidia_env as it’s much faster for encoding and avoid issues I got with the normal libx264.</p>
+<p>Need to check more in detail for Sound capture at the same time and see if there is different input format to play with.</p>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+      <a href="http://localhost:1313/posts/2023-02-26_network-graph-rendering-isopleths-with-gmic/" class="button inline prev">
+        Network Graph rendering : Isopleths with Gmic
+      </a>
+    
+    
+      ::
+    
+    
+      <a href="http://localhost:1313/posts/2020-10-13_twitch-and-ffmpeg-with-some-youtube-dl-help-fetch-from-live-stream-to-local-file/article/" class="button inline next">
+        Twitch and FFmpeg and Youtube-dl:  Fetch from live stream to local file
+      </a>
+    
+  </div>
+</div>
+
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2025 Powered by <a href="https://gohugo.io">Hugo</a></span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
